@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="paydirekt api explorer">
+    <meta name="author" content="Niels Lauritzen">
+    <!--<link rel="icon" href="../../favicon.ico">-->
+
+    <title>Paydirekt API Explorer</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/dashboard.css" rel="stylesheet">
+    <link href="css/form-validation" rel="stylesheet">
+    <link href="css/customStyle.css" rel="stylesheet">
+    
+    <script src="js/init.js"></script>
+    <script src="js/requestHandler.js"></script>
+  </head>
+
+  <body>
+    <script>
+      window.addEventListener("load", init);
+    </script>
+    
+    <nav class="navbar navbar-dark sticky-top bg-primary flex-md-nowrap p-0">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#menu" id="mainMenu">API Explorer</a>
+      <!-- <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search"> -->
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap"><a class="nav-link" href="#settings" id="settingsMenu"><span data-feather="sliders"></span> Settings</a></li>
+        <!--<li class="nav-item text-nowrap"><a class="nav-link" href="https://www.paydirekt.de/haendler/merchant-api.html" id="paydirektApi" target="_blank"><span data-feather="bookmark"></span> paydirekt API</a></li>-->
+      </ul>
+    </nav>
+    
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <h5 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">Dashboard</h5>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">Authentification & Shipping</h6>
+            <ul class="nav flex-column">
+              <li class="nav-item"><a class="nav-link" href="#authentication" id="authenticationMenu"><span data-feather="lock"></span>Token Obtain</a></li>
+              <li class="nav-item"><a class="nav-link" href="#shipping-address" id="shippingAddressMenu"><span data-feather="home"></span>Shipping Address</a></li>
+            </ul>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">ThirdParty Authorization</h6>
+            <ul class="nav flex-column">
+              <li class="nav-item"><a class="nav-link" href="#customer-authorization-post" id="customerAuthorizationPostMenu"><span data-feather="user-plus"></span>Post Customer Authorization</a></li>
+              <li class="nav-item"><a class="nav-link" href="#customer-authorization-get" id="customerAuthorizationGetMenu"><span data-feather="user-check"></span>Get Customer Authorization</a></li>
+              <li class="nav-item"><a class="nav-link" href="#merchant-authorization-get" id="merchantAuthorizationGetMenu"><span data-feather="users"></span>Get Merchant Authorization</a></li>
+            </ul>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">Checkout</h6>
+            <ul class="nav flex-column">
+              <li class="nav-item"><a class="nav-link" href="#checkout-post" id="checkoutPostMenu"><span data-feather="shopping-cart"></span>Post Checkout</a></li>
+              <li class="nav-item"><a class="nav-link" href="#checkout-execute" id="checkoutExecuteMenu"><span data-feather="zap"></span>Execute Express Checkout</a></li>
+              <li class="nav-item"><a class="nav-link" href="#checkout-get" id="checkoutGetMenu"><span data-feather="shopping-bag"></span>Get Checkout</a></li>
+              <li class="nav-item"><a class="nav-link" href="#deliveryInformation-update" id="deliveryInformationUpdateMenu"><span data-feather="package"></span>Update Delivery Information</a></li>
+              <li class="nav-item"><a class="nav-link" href="#invoiceReference-update" id="invoiceReferenceMenu"><span data-feather="credit-card"></span>Update Invoice Reference</a></li>
+              <li class="nav-item"><a class="nav-link" href="#order-close" id="orderCloseMenu"><span data-feather="trash"></span>Close Checkout</a></li>
+            </ul>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">Capture</h6>
+            <ul class="nav flex-column">
+              <li class="nav-item"><a class="nav-link" href="#capture-post" id="capturePostMenu"><span data-feather="rotate-cw"></span>Post Capture</a></li>
+              <li class="nav-item"><a class="nav-link" href="#capture-get" id="captureGetMenu"><span data-feather="refresh-cw"></span>Get Capture</a></li>
+            </ul>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">Refund</h6>
+            <ul class="nav flex-column">
+              <li class="nav-item"><a class="nav-link" href="#refund-post" id="refundPostMenu"><span data-feather="rotate-ccw"></span>Post Refund</a></li>
+              <li class="nav-item"><a class="nav-link" href="#refund-get" id="refundGetMenu"><span data-feather="refresh-ccw"></span>Get Refund</a></li>
+            </ul>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">Report</h6>
+            <ul class="nav flex-column">
+              <li class="nav-item"><a class="nav-link" href="#reports" id="reportsMenu"><span data-feather="list"></span>Report</a></li>
+              <li class="nav-item"><a class="nav-link" href="#accounts" id="accountsMenu"><span data-feather="user"></span>Accountinformationen</a></li>
+              <li class="nav-item"><a class="nav-link" href="#log" id="logMenu"><span data-feather="bell"></span>Callback Log</a></li>
+            </ul>
+          </div>
+        </nav>
+        
+        
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+          
+          <pre id="output"></pre>
+          
+          <div id="settings">
+            <h1 class="h2 border-bottom">Settings</h1>
+            <div class="form-row">
+              <div class="input-group col-md-4">
+              <label for="endpoint" class="sr-only">API Endpoint</label>
+              <input type="text" name="endpoint" id="endpoint" class="form-control" placeholder="API Endpoint" value="https://api.sandbox.paydirekt.de">
+                <span class="input-group-btn"><button type="button" id="setEndpoint" class="btn btn-secondary btn-success">Set Endpoint</button></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <button type="button" name="clearSession" id="clearSession" class="btn btn-danger">Destroy Session</button>
+            </div>
+          </div>
+          
+          <div id="authentication">
+            <h2 class="h2">Token Obtain</h2>
+            <hr class="mb-6">
+            <form id="tokenObtainForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="authenticationApiKey">API Key</label>
+                  <input type="text" name="apiKey" id="authenticationApiKey" class="form-control" placeholder="API Key">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="authenticationApiSecret">API Secret</label>
+                  <input type="text" name="apiSecret" id="authenticationApiSecret" class="form-control" placeholder="API Secret">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="authenticationPspApiKey">PSP API Key</label>
+                  <input type="text" name="pspApiKey" id="authenticationPspApiKey" class="form-control" placeholder="PSP API Key"><br>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="authenticationPspApiSecret">PSP API Secret</label>
+                  <input type="text" name="pspApiSecret" id="authenticationPspApiSecret" class="form-control" placeholder="PSP API Secret"><br>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="authenticationCustomerAuthorizationReference">Käuferautorisierung</label>
+                  <input type="text" name="customerAuthorizationReference" id="authenticationCustomerAuthorizationReference" class="form-control" placeholder="Käuferautorisierung"><br>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="authenticationMerchantAuthorizationReference">Händlerautorisierung</label>
+                  <input type="text" name="merchantAuthorizationReference" id="authenticationMerchantAuthorizationReference" class="form-control" placeholder="Händlerautorisierung"><br>
+                </div>
+              </div>
+              <button type="button" id="postTokenObtain" class="btn btn-success">Token abrufen</button>
+              <button type="button" id="postTokenObtainTp" class="btn btn-success">OneClick Token abrufen</button>
+              <button type="button" id="checkTokenExpiry" class="btn">Tokenablauf prüfen</button>
+            </form>
+          </div>
+            
+          <div id="shipping-address">
+            <h2 class="h2">Shipping / Terminal Address</h2>
+            <hr class="mb-6">
+            <form id="shippingAddressForm">
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="addressAddresseeGivenName">Vorname</label>
+                  <input type="text" name="addresseeGivenName" id="addressAddresseeGivenName" class="form-control" placeholder="Vorname" maxlength="100" value="Max">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="addressAddresseeLastName">Nachname</label>
+                  <input type="text" name="addresseeLastName" id="addressAddresseeLastName" class="form-control" placeholder="Nachname" maxlength="100" value="Mustermann">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="addressName">Terminal Name</label>
+                  <input type="text" name="name" id="addressName" class="form-control" placeholder="Terminal Name" maxlength="100" value="Office Snackautomat 1">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="addressCompany">Firma</label>
+                  <input type="text" name="company" id="addressCompany" class="form-control" placeholder="Firma" maxlength="100" value="paydirekt GmbH">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="addressStreet">Strasse</label>
+                  <input type="text" name="street" id="addressStreet" class="form-control" placeholder="Strasse" maxlength="100" value="Hamburger Allee">
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="addressStreetNr">Hausnummer</label>
+                  <input type="text" name="streetNr" id="addressStreetNr" class="form-control" placeholder="Hausnummer" maxlength="10" value="26-28">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="addressAdditionalAddressInformation">Adresszusatz</label>
+                  <input type="text" name="additionalAddressInformation" id="addressAdditionalAddressInformation" class="form-control" placeholder="Adresszusatz" maxlength="100" value="6. OG">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="addressZip">PLZ</label>
+                  <input type="text" name="zip" id="addressZip" class="form-control" placeholder="PLZ" maxlength="10" value="60486">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="addressCity">Stadt</label>
+                  <input type="text" name="city" id="addressCity" class="form-control" placeholder="Stadt" maxlength="100" value="Frankfurt am Main">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="addressState">Bundesland</label>
+                  <select name="state" id="addressState" class="form-control">
+                    <option value="" selected>Bitte wählen...</option>
+                    <option>Baden-Württemberg</option>
+                    <option>Bayern</option>
+                    <option>Berlin</option>
+                    <option>Brandenburg</option>
+                    <option>Bremen</option>
+                    <option>Hamburg</option>
+                    <option>Hessen</option>
+                    <option>Mecklenburg-Vorpommern</option>
+                    <option>Niedersachsen</option>
+                    <option>Nordrhein-Westfalen</option>
+                    <option>Rheinland-Pfalz</option>
+                    <option>Saarland</option>
+                    <option>Sachsen</option>
+                    <option>Sachsen-Anhalt</option>
+                    <option>Schleswig-Holstein</option>
+                    <option>Thüringen</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="addressCountryCode">Ländercode</label>
+                  <select name="countryCode" id="addressCountryCode" class="form-control" placeholder="Ländercode" maxlength="2">
+                    <option selected>DE</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="addressEmailAddress">E-Mail</label>
+                  <input type="text" name="emailAddress" id="addressEmailAddress" class="form-control" placeholder="E-Mail" value="haendler@paydirekt.de">
+                </div>
+              </div>
+              <button type="button" id="postShippingAddress" class="btn btn-success">Adresse speichern</button>
+            </form>
+          </div>
+
+          <div id="customer-authorization-post">
+            <h2 class="h2">Create Customer Authorization</h2>
+            <hr class="mb-6">
+            <form id="postCustomerAuthorizationForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="postCustomerAuthorizationScopes">Scopes</label>
+                  <select name="scopes[]" id="postCustomerAuthorizationScopes" class="form-control" multiple>
+                    <option selected>PERFORM_CHECKOUT</option>
+                    <option>READ_ACCOUNT_STATUS</option>
+                    <option>READ_CREDIT</option>
+                    <option>READ_TRANSACTIONS</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="postCustomerAuthorizationDeviceId">Device ID</label>
+                  <input type="text" name="deviceId" id="postCustomerAuthorizationDeviceId" class="form-control" placeholder="Device ID" value="213217418AE42C34">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="postCustomerAuthorizationDeviceFingerprint">Device Fingerprint</label>
+                  <input type="text" name="deviceFingerprint" id="postCustomerAuthorizationDeviceFingerprint" class="form-control" placeholder="Device Fingerprint" value="9870b1864be44901b71047233fc3a43a">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-5">
+                  <label for="postCustomerAuthorizationDeviceName">Device Name</label>
+                  <input type="text" name="deviceName" id="postCustomerAuthorizationDeviceName" class="form-control" placeholder="Device Name" required value="Max' Google Pixel">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="postCustomerAuthorizationDeviceIpAddress">Device IP Address</label>
+                  <input type="text" name="deviceIpAddress" id="postCustomerAuthorizationDeviceIpAddress" class="form-control" placeholder="Device IP Address" required value="1.2.3.4.">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postCustomerAuthorizationRedirectUrlAfterSuccess">Rücksprungadresse bei Erfolg</label>
+                  <input type="text" name="redirectUrlAfterSuccess" id="postCustomerAuthorizationRedirectUrlAfterSuccess" class="form-control" placeholder="Rücksprungadresse bei Erfolg" maxlength="2000" value="https://lauritzen.me/restricted/paydirekt-explorer/#success">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postCustomerAuthorizationRedirectUrlAfterCancellation">Rücksprungadresse bei Abbruch</label>
+                  <input type="text" name="redirectUrlAfterCancellation" id="postCustomerAuthorizationRedirectUrlAfterCancellation" class="form-control" placeholder="Rücksprungadresse bei Fehler" maxlength="2000" value="https://lauritzen.me/restricted/paydirekt-explorer/#cancel">
+                  </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postCustomerAuthorizationRedirectUrlAfterFailure">Rücksprungadresse bei Fehler</label>
+                  <input type="text" name="redirectUrlAfterFailure" id="postCustomerAuthorizationRedirectUrlAfterFailure" class="form-control" placeholder="Rücksprungadresse bei Ablehnung" maxlength="2000" value="https://lauritzen.me/restricted/paydirekt-explorer/#failure">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="postCustomerAuthorizationStartDate">Abo Start</label>
+                  <input type="date" name="startDate" id="postCustomerAuthorizationStartDate" class="form-control">
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="postCustomerAuthorizationAmount">Abo Betrag</label>
+                  <input type="text" name="amount" id="postCustomerAuthorizationAmount" class="form-control" placeholder="Abo Betrag" value="9.99">
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="postCustomerAuthorizationCurrency">Abo Währung</label>
+                  <input type="text" name="currency" id="postCustomerAuthorizationCurrency" class="form-control" placeholder="Abo Währung" value="EUR">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="postCustomerAuthorizationIntervalUnit">Abo Bezahl-Intervall</label>
+                  <input type="text" name="intervalUnit" id="postCustomerAuthorizationIntervalUnit" class="form-control" placeholder="Abo Bezahl-Intervall" value="MONTH">
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="postCustomerAuthorizationInterval">Abo Intervall</label>
+                  <input type="text" name="interval" id="postCustomerAuthorizationInterval" class="form-control" placeholder="Abo Intervall" value="12">
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="col-auto">
+                  <button type="button" id="postCustomerAuthorization" class="btn btn-success mb-2">Käuferautorisierung anlegen</button>
+                </div>
+                <div class="col-auto">
+                  <div class="form-check custom-control custom-checkbox mb-2">
+                    <input type="checkbox" name="redirect" id="postCustomerAuthorizationRedirect" class="custom-control-input" value="true">
+                    <label class="custom-control-label" for="postCustomerAuthorizationRedirect">Redirect</label>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div id="customer-authorization-get">
+            <h2 class="h2">Retrieve Customer Authorization</h2>
+            <hr class="mb-6">
+            <form id="getCustomerAuthorizationForm">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="getCustomerAuthorizationThirdPartyCustomerAuthorizationId">ID Käuferautorisierung</label>
+                  <input type="text" name="thirdPartyCustomerAuthorizationId" id="getCustomerAuthorizationThirdPartyCustomerAuthorizationId" class="form-control" placeholder="ID Käuferautorisierung" required>
+                </div>
+              </div>
+              <button type="button" id="getCustomerAuthorization" class="btn btn-success">Käuferautorisierung abrufen</button>
+            </form>
+          </div>
+
+          <div id="merchant-authorization-get">
+            <h2 class="h2">Retrieve Merchant Authorization</h2>
+            <hr class="mb-6">
+            <form id="getMerchantAuthorizationForm">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="getMerchantAuthorizationThirdPartyMerchantAuthorizationId">ID Händlerautorisierung</label>
+                  <input type="text" name="thirdPartyMerchantAuthorizationId" id="getMerchantAuthorizationthirdPartyMerchantAuthorizationId" class="form-control" placeholder="Merchant Authorization ID" required>
+                </div>
+              </div>
+              <button type="button" id="getMerchantAuthorization" class="btn btn-success">Händlerautorisierung abrufen</button>
+            </form>
+          </div>
+                
+          <div id="checkout-post">
+            <h2 class="h2">Create Checkout</h2>
+            <hr class="mb-6">
+            <div class="row" id="shoppingCart">
+              <div class="col-md-8 order-md-4 mb-2">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="text-muted">Warenkorb</span>
+                  <span class="badge badge-secondary badge-pill" id="shoppingCartNumberOfItems"></span>
+                </h4>
+                <ul class="list-group mb-3" id="shoppingCartItems">
+                <!--
+                  <li class="list-group-item d-flex justify-content-between 1h-condensed">
+                    <div>
+                      <h6 class="my-0" id="shoppingCartQuantityName">1 Artikelname</h6>
+                      <small class="text-muted" id="shoppingCartEan">EAN</small>
+                    </div>
+                    <span class="text-muted" id="shoppingCartPrice">X€</span>
+                  </li>
+                -->
+                </ul>
+                <form class="card p-2" id="shoppingBasketForm">
+                  <div class="form-row">
+                    <div class="form-group col-md-3">
+                      <label for="itemsName">Artikelname</label>
+                      <input type="text" name="name" id="itemsName" class="form-control" placeholder="Artikelname" value="iPhone 0815">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="itemsQuantity">Anzahl</label>
+                      <input type="number" name="quantity" id="itemsQuantity" class="form-control" placeholder="Anzahl" value="1">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="itemsEan">EAN</label>
+                      <input type="text" name="ean" id="itemsEan" class="form-control" placeholder="EAN" value="123456789">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label for="itemsPrice">Preis</label>
+                      <input type="number" name="price" id="itemsPrice" class="form-control" placeholder="Preis" value="45.00">
+                    </div>
+                  </div>
+                  <button type="button" id="addItem" class="btn">Item hinzufügen</button>
+                </form>
+              </div>
+            </div>
+            <hr class="mb-6">
+            <form id="postCheckoutForm">
+              <h4><span class="text-muted">Checkout</span></h4>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutType">Typ Bestellung</label>
+                  <select name="type" id="postCheckoutType" class="form-control">
+                    <option selected>DIRECT_SALE</option>
+                    <option>ORDER</option>
+                    <option>ORDER_SECURED</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutRequestedPreauthorizationValidity">Garantiezeitraum Bestellung</label>
+                  <input type="date" name="requestedPreauthorizationValidity" id="postCheckoutRequestedPreauthorizationValidity" class="form-control" placeholder="Garantiezeitraum Bestellung">
+                </div>
+                <div class="form-check form-check-inline custom-control custom-checkbox ml-3">
+                  <input type="checkbox" name="oneClick" id="postCheckoutOneClick" class="custom-control-input" value="true">
+                  <label class="custom-control-label" for="postCheckoutOneClick">OneClick</label>
+                </div>
+                <div class="form-check form-check-inline custom-control custom-checkbox">
+                  <input type="checkbox" name="express" id="postCheckoutExpress" class="custom-control-input" value="true">
+                  <label class="custom-control-label" for="postCheckoutExpress">Express</label>
+                </div>
+                <div class="form-check form-check-inline custom-control custom-checkbox">
+                  <input type="checkbox" name="overcapture" id="postCheckoutOvercapture" class="custom-control-input" value="true">
+                  <label class="custom-control-label" for="postCheckoutOvercapture">Overcapture</label>
+                </div>
+              </div>
+                
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutTotalAmount">Gesamtbetrag</label>
+                  <input type="number" name="totalAmount" id="postCheckoutTotalAmount" class="form-control" placeholder="Gesamtbetrag" min="0.01" max="50000" step="0.01" required value="49.99">
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutOrderAmount">Warenwert</label>
+                  <input type="number" name="orderAmount" id="postCheckoutOrderAmount" class="form-control" placeholder="Warenwert" min="0.01" max="50000" step="0.01" value="45.00">
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutShippingAmount">Versandkosten</label>
+                  <input type="number" name="shippingAmount" id="postCheckoutShippingAmount" class="form-control" placeholder="Versandkosten" min="0.00" step="0.01" value="4.99">
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutCurrency">Währung</label>
+                  <input type="text" name="currency" id="postCheckoutCurrency" class="form-control" maxlength="3" required readonly value="EUR">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutShoppingCartType">Warenkorbtyp</label>
+                  <select name="shoppingCartType" id="postCheckoutShoppingCartType" class="form-control">
+                    <option>PHYSICAL</option>
+                    <option>DIGITAL</option>
+                    <option selected>MIXED</option>
+                    <option>ANONYMOUS_DONATION</option>
+                    <option>AUTHORITIES_PAYMENT</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutDeliveryType">Lieferung</label>
+                  <select name="deliveryType" id="postCheckoutDeliveryType" class="form-control">
+                    <option selected>STANDARD</option>
+                    <option>PACKSTATION</option>
+                    <option>STORE_PICKUP</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutExpectedShippingDate">Erwartetes Versanddatum</label>
+                  <input type="date" name="expectedShippingDate" id="postCheckoutExpectedShippingDate" class="form-control" placeholder="Erwartetes Versanddatum">
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutLogisticsProvider">Paket-Dienstleister</label>
+                  <input type="text" name="logisticsProvider" id="postCheckoutLogisticsProvider" class="form-control" placeholder="Paket-Dienstleister" value="DHL">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="postCheckoutTrackingNumber">Sendungsnummer</label>
+                  <input type="text" name="trackingNumber" id="postCheckoutTrackingNumber" class="form-control" placeholder="Sendungsnummer" value="DHL0815">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="postCheckoutMerchantOrderReferenceNumber">Bestellnummer</label>
+                  <input type="text" name="merchantOrderReferenceNumber" id="postCheckoutMerchantOrderReferenceNumber" class="form-control" placeholder="Bestellnummer" maxlength="20" required value="ORDER0815">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="postCheckoutMerchantCustomerNumber">Kundennummer</label>
+                  <input type="text" name="merchantCustomerNumber" id="postCheckoutMerchantCustomerNumber" class="form-control" placeholder="Kundennummer" maxlength="20" value="CUSTOMER0815">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="postCheckoutMerchantInvoiceReferenceNumber">Rechnungsnummer</label>
+                  <input type="text" name="merchantInvoiceReferenceNumber" id="postCheckoutMerchantInvoiceReferenceNumber" class="form-control" placeholder="Rechnungsnummer" maxlength="100" value="INVOICE0815">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutMinimumAge">Mindestalter</label>
+                  <input type="number" name="minimumAge" id="postCheckoutMinimumAge" class="form-control" placeholder="Mindestalter" maxlength="2" value="18">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="postCheckoutMerchantReconciliationReferenceNumber">Reconciliationnummer</label>
+                  <input type="text" name="merchantReconciliationReferenceNumber" id="postCheckoutMerchantReconciliationReferenceNumber" class="form-control" placeholder="Reconciliationnummer" maxlength="30" value="RECON0815">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="postCheckoutNote">Notiz</label>
+                  <input type="text" name="note" id="postCheckoutNote" class="form-control" placeholder="Notiz" maxlength="37" value="Vielen Dank fuer Ihren Einkauf!">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-lg-6">
+                  <label for="postCheckoutSha256hashedEmailAddress">E-Mail SHA256</label>
+                  <input type="text" name="sha256hashedEmailAddress" id="postCheckoutSha256hashedEmailAddress" class="form-control" placeholder="E-Mail SHA256" value="haendler@paydirekt.de">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postCheckoutRedirectUrlAfterSuccess">Rücksprungadresse bei Erfolg</label>
+                  <input type="text" name="redirectUrlAfterSuccess" id="postCheckoutRedirectUrlAfterSuccess" class="form-control" placeholder="Rücksprungadresse bei Erfolg" maxlength="2000" required value="https://lauritzen.me/restricted/paydirekt-explorer/#success">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postCheckoutRedirectUrlAfterCancellation">Rücksprungadresse bei Fehler</label>
+                  <input type="text" name="redirectUrlAfterCancellation" id="postCheckoutRedirectUrlAfterCancellation" class="form-control" placeholder="Rücksprungadresse bei Fehler" maxlength="2000" required value="https://lauritzen.me/restricted/paydirekt-explorer/#cancel">
+                  </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postCheckoutRedirectUrlAfterRejection">Rücksprungadresse bei Ablehnung</label>
+                  <input type="text" name="redirectUrlAfterRejection" id="postCheckoutRedirectUrlAfterRejection" class="form-control" placeholder="Rücksprungadresse bei Ablehnung" maxlength="2000" required value="https://lauritzen.me/restricted/paydirekt-explorer/#reject">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postCheckoutRedirectUrlAfterAgeVerificationFailure">Rücksprungadresse bei Mindestalter </label>
+                  <input type="text" name="redirectUrlAfterAgeVerificationFailure" id="postCheckoutRedirectUrlAfterAgeVerificationFailure" class="form-control" placeholder="Rücksprungadresse bei Mindestalter" maxlength="2000" value="https://lauritzen.me/restricted/paydirekt-explorer/#age">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postCheckoutCallbackUrlStatusUpdates">Endpointadresse für Statusupdates</label>
+                  <input type="text" name="callbackUrlStatusUpdates" id="postCheckoutCallbackUrlStatusUpdates" class="form-control" placeholder="Endpointadresse für Statusupdates" maxlength="2000" value="https://lauritzen.me/restricted/paydirekt-explorer/webhook.php">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postCheckoutCallbackUrlCheckDestinations">Callback Verfizierung Lieferadresse (Express)</label>
+                  <input type="text" name="callbackUrlCheckDestinations" id="postCheckoutCallbackUrlCheckDestinations" class="form-control" placeholder="Callback Verfizierung Lieferadresse (Express)" maxlength="2000" value="https://lauritzen.me/restricted/paydirekt-explorer/api/expressCallback.php">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postCheckoutWebUrlShippingTerms">Link zu Versandbedingungen (Express)</label>
+                  <input type="text" name="webUrlShippingTerms" id="postCheckoutWebUrlShippingTerms" class="form-control" placeholder="Link zu Versandbedingungen (Express)" maxlength="2000" value="https://lauritzen.me/restricted/paydirekt-explorer/#shippingTerms">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="postCheckoutDeviceId">Device ID</label>
+                  <input type="text" name="deviceId" id="postCheckoutDeviceId" class="form-control" placeholder="Device ID" maxlength="50" value="213217418AE42C34">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="postCheckoutDeviceFingerprint">Device Fingerprint</label>
+                  <input type="text" name="deviceFingerprint" id="postCheckoutDeviceFingerprint" class="form-control" placeholder="Device Fingerprint" maxlength="50" value="9870b1864be44901b71047233fc3a43a">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="postCheckoutDeviceIpAddress">Device IP Address</label>
+                  <input type="text" name="deviceIpAddress" id="postCheckoutDeviceIpAddress" class="form-control" placeholder="Device IP Address" maxlength="40" required value="1.2.3.4.">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="postCheckoutTerminalId">Terminal ID</label>
+                  <input type="text" name="terminalId" id="postCheckoutTerminalId" class="form-control" placeholder="Terminal ID" maxlength="50" value="Office Snackautomat 1">
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="col-auto">
+                  <button type="button" id="postCheckout" class="btn btn-success mb-2">Bestellung aufgeben</button>
+                </div>
+                <div class="col-auto">
+                  <div class="form-check custom-control custom-checkbox mb-2">
+                    <input type="checkbox" name="redirect" id="postCheckoutRedirect" class="custom-control-input" value="true">
+                    <label class="custom-control-label" for="postCheckoutRedirect">Redirect</label>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          
+          <div id="checkout-execute">
+            <h2 class="h2">Execute Express Checkout</h2>
+            <hr class="mb-6">
+            <form id="executeCheckoutForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="executeCheckoutCheckoutId">Checkout ID</label>
+                  <input type="text" name="checkoutId" id="executeCheckoutCheckoutId" class="form-control" placeholder="Checkout ID" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="executeCheckoutTermsAcceptedTimestamp">Geschäfts- und Lieferbedingungen akzeptiert</label>
+                  <input type="date" name="termsAcceptedTimestamp" id="executeCheckoutTermsAcceptedTimestamp" class="form-control" placeholder="Geschäfts- und Lieferbedingungen akzeptiert" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="executeCheckoutMerchantOrderReferenceNumber">Bestellnummer</label>
+                  <input type="text" name="merchantOrderReferenceNumber" id="executeCheckoutMerchantOrderReferenceNumber" class="form-control" placeholder="Bestellnummer" maxlength="20" required value="ORDER0815EXPRESS">
+                </div>
+              </div>
+              <button type="button" id="executeCheckout" class="btn btn-success">Express-Bestellung bestätigen</button>
+            </form>
+          </div>
+          
+          <div id="checkout-get">
+            <h2 class="h2">Retrieve Checkout</h2>
+            <hr class="mb-6">
+            <form id="getCheckoutForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="getCheckoutCheckoutId">Checkout ID</label>
+                  <input type="text" name="checkoutId" id="getCheckoutCheckoutId" class="form-control" placeholder="Checkout ID" required>
+                </div>
+              </div>
+              <button type="button" id="getCheckout" class="btn btn-success">Bestellung abrufen</button>
+            </form>
+          </div>
+          
+          <div id="deliveryInformation-update">
+            <h2 class="h2">Update Delivery Information</h2>
+            <hr class="mb-6">
+            <form id="updateDeliveryInformationForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="updateDeliveryInformationCheckoutId">Checkout ID</label>
+                  <input type="text" name="checkoutId" id="updateDeliveryInformationCheckoutId" class="form-control" placeholder="Checkout ID" required><br>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="updateDeliveryInformationExpectedShippingDate">Erwartetes Versanddatum</label>
+                  <input type="date" name="expectedShippingDate" id="updateDeliveryInformationExpectedShippingDate" class="form-control" placeholder="Erwartetes Versanddatum">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="updateDeliveryInformationLogisticsProvider">Paket-Dienstleister</label>
+                  <input type="text" name="logisticsProvider" id="updateDeliveryInformationLogisticsProvider" class="form-control" placeholder="Paket-Dienstleister" value="DHL">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="updateDeliveryInformationTrackingNumber">Sendungsnummer</label>
+                  <input type="text" name="trackingNumber" id="updateDeliveryInformationTrackingNumber" class="form-control" placeholder="Sendungsnummer" value="DHL0815">
+                </div>
+              </div>
+              <button type="button" id="updateDeliveryInformation" class="btn btn-success">Versandbedingungen aktualisieren</button>
+            </form>
+          </div>
+          
+          <div id="invoiceReference-update">
+            <h2 class="2">Update Invoice Reference</h2>
+            <hr class="mb-6">
+            <form id="updateInvoiceReferenceForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="updateInvoiceReferenceCheckoutId">Checkout ID</label>
+                  <input type="text" name="checkoutId" id="updateInvoiceReferenceCheckoutId" class="form-control" placeholder="Checkout ID" required><br>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="updateInvoiceReferenceMerchantInvoiceReferenceNumber">Rechnungsnummer</label>
+                  <input type="text" name="merchantInvoiceReferenceNumber" id="updateInvoiceReferenceMerchantInvoiceReferenceNumber" class="form-control" placeholder="Rechnungsnummer" maxlength="100" value="INVOICE0815">
+                </div>
+              </div>
+              <button type="button" id="updateInvoiceReference" class="btn btn-success">Rechnungsnummer aktualisieren</button>
+            </form>
+          </div>
+          
+          <div id="order-close">
+            <h2 class="h2">Close Order</h2>
+            <hr class="mb-6">
+            <form id="closeOrderForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="closeOrderCheckoutId">Checkout ID</label>
+                  <input type="text" name="checkoutId" id="closeOrderCheckoutId" class="form-control" placeholder="Checkout ID" required>
+                </div>
+              </div>
+              <button type="button" id="postCloseOrder" class="btn btn-success">Bestellung schliessen</button>
+            </form>
+          </div>
+            
+          <div id="capture-post">
+            <h2 class="h2">Create Capture</h2>
+            <hr class="mb-6">
+            <form id="postCaptureForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="postCaptureCheckoutId">Checkout ID</label>
+                  <input type="text" name="checkoutId" id="postCaptureCheckoutId" class="form-control" placeholder="Checkout ID" required>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="form-group col-md-2">
+                  <label for="postCaptureAmount">Zahlungsbetrag</label>
+                  <input type="number" name="amount" id="postCaptureAmount" class="form-control" placeholder="Zahlungsbetrag" min="0.01" max="50000" step="0.01" required value="45.00">
+                </div>
+                <div class="form-check form-check-inline custom-control custom-checkbox ml-3">
+                  <input type="checkbox" name="finalCapture" id="postCaptureFinalCapture" class="custom-control-input" value="true">
+                  <label class="custom-control-label" for="postCaptureFinalCapture">Final Capture</label>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="postCaptureMerchantCaptureReferenceNumber">Referenznummer Capture</label>
+                  <input type="text" name="merchantCaptureReferenceNumber" id="postCaptureMerchantCaptureReferenceNumber" class="form-control" placeholder="Referenznummer Capture" maxlength="30" value="CAPTURE0815">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="postCaptureCaptureInvoiceReferenceNumber">Rechnungsnummer</label>
+                  <input type="text" name="captureInvoiceReferenceNumber" id="postCaptureCaptureInvoiceReferenceNumber" class="form-control" placeholder="Rechnungsnummer" maxlength="20" value="INVOICE0815">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="postCaptureMerchantReconciliationReferenceNumber">Reconciliationnummer</label>
+                  <input type="text" name="merchantReconciliationReferenceNumber" id="postCaptureMerchantReconciliationReferenceNumber" class="form-control" placeholder="Reconciliationnummer" maxlength="30" value="RECON0815">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="postCaptureCaptureNote">Notiz</label>
+                  <input type="text" name="note" id="postCaptureCaptureNote" class="form-control" placeholder="Notiz" maxlength="37" value="Vielen Dank fuer Ihren Einkauf!">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postCaptureCallbackUrlStatusUpdates">Endpointadresse für Statusupdates</label>
+                  <input type="text" name="callbackUrlStatusUpdates" id="postCaptureCallbackUrlStatusUpdates" class="form-control" placeholder="Endpointadresse für Statusupdates" maxlength="2000" value="https://lauritzen.me/restricted/paydirekt-explorer/webhook.php">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutExpectedShippingDate">Erwartetes Versanddatum</label>
+                  <input type="date" name="expectedShippingDate" id="postCheckoutExpectedShippingDate" class="form-control" placeholder="Erwartetes Versanddatum">
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="postCheckoutLogisticsProvider">Paket-Dienstleister</label>
+                  <input type="text" name="logisticsProvider" id="postCheckoutLogisticsProvider" class="form-control" placeholder="Paket-Dienstleister" value="DHL">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="postCheckoutTrackingNumber">Sendungsnummer</label>
+                  <input type="text" name="trackingNumber" id="postCheckoutTrackingNumber" class="form-control" placeholder="Sendungsnummer" value="DHL0815">
+                </div>
+              </div>
+              <button type="button" id="postCapture" class="btn btn-success">Capture</button>
+             </form>
+          </div>
+          
+          <div id="capture-get">
+            <h2 class="h2">Retrieve Capture</h2>
+            <hr class="mb-6">
+            <form id="getCaptureForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="getCaptureCheckoutId">Checkout ID</label>
+                  <input type="text" name="checkoutId" id="getCaptureCheckoutId" class="form-control" placeholder="Checkout ID" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="getCaptureCaptureId">Capture ID</label>
+                  <input type="text" name="captureId" id="getCaptureCaptureId" class="form-control" placeholder="Capture ID" required>
+                </div>
+              </div>
+              <button type="button" id="getCapture" class="btn btn-success">Capture abrufen</button>
+            </form>
+          </div>
+
+          <div id="refund-post">
+            <h2 class="h2">Create Refund</h2>
+            <hr class="mb-6">
+            <form id="postRefundForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="postRefundCheckoutId">Checkout ID</label>
+                  <input type="text" name="checkoutId" id="postRefundCheckoutId" class="form-control" placeholder="Checkout ID" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="postRefundRefundAmount">Refundbetrag</label>
+                  <input type="number" name="amount" id="postRefundRefundAmount" class="form-control" placeholder="Refundbetrag" min="0.01" max="50000" step="0.01" required value="45.00">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="postRefundReason">Grund des Refunds</label>
+                  <select name="reason" id="postRefundReason" class="form-control">
+                    <option value="MERCHANT_TECHNICAL_PROBLEM">Technisches Problem bei Abwicklung</option>
+                    <option value="MERCHANT_CAN_NOT_DELIVER_GOODS">Händler kann Ware nicht liefern</option>
+                    <option value="REFUND_OBLIGINESS" selected>Rücküberweisung wegen Kulanz</option>
+                    <option value="CUSTOMER_RETURN_GOODS">Rücküberweisung wegen Warenrücksendung</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="postRefundM<erchantRefundReferenceNumber">Referenznummer Refund</label>
+                  <input type="text" name="merchantRefundReferenceNumber" id="postRefundMerchantRefundReferenceNumber" class="form-control" placeholder="Referenznummer Refund" maxlength="30" value="REFUND0815">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="postRefundMerchantReconciliationReferenceNumber">Reconciliationnummer</label>
+                  <input type="text" name="merchantReconciliationReferenceNumber" id="postRefundMerchantReconciliationReferenceNumber" class="form-control" placeholder="Reconciliationnummer" maxlength="30" value="RECON0815">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="postRefundNote">Notiz</label>
+                  <input type="text" name="note" id="postRefundNote" class="form-control" placeholder="Notiz" maxlength="37" value="Vielen Dank fuer Ihren Einkauf!">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="postRefundCallbackUrlStatusUpdates">Endpointadresse für Statusupdates</label>
+                  <input type="text" name="callbackUrlStatusUpdates" id="postRefundCallbackUrlStatusUpdates" class="form-control" placeholder="Endpointadresse für Statusupdates" maxlength="2000" value="https://lauritzen.me/restricted/paydirekt-explorer/webhook.php">
+                </div>
+              </div>
+              <button type="button" id="postRefund" class="btn btn-success">Refund</button>
+            </form>
+          </div>
+
+          <div id="refund-get">
+            <h2 class="h2">Retrieve Refund</h2>
+            <hr class="mb-6">
+            <form id="getRefundForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="getRefundCheckoutId">Checkout ID</label>
+                  <input type="text" name="checkoutId" id="getRefundCheckoutId" class="form-control" placeholder="Checkout ID" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="getRefundRefundId">Refund ID</label>
+                  <input type="text" name="refundId" id="getRefundRefundId" class="form-control" placeholder="Refund ID" required>
+                </div>
+              </div>
+              <button type="button" id="getRefund" class="btn btn-success">Refund abrufen</button>
+            </form>
+          </div>
+          
+          <div id="reports">
+            <h2 class="h2">Reports</h2>
+            <hr class="mb-6">
+            <form id="getReportForm">
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="getReportFrom">Von</label>
+                  <input type="datetime-local" name="from" id="getReportFrom" class="form-control" placeholder="Von" aria-describedby="getReportFromHelp">
+                  <small id="getReportFromHelp" class="form-text text-muted">Datum/Zeit im Format DD.MM.YYYY hh:mm angeben</small>
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="getReportTo">Bis</label>
+                  <input type="datetime-local" name="to" id="getReportTo" class="form-control" placeholder="Bis" aria-describedby="getReportToHelp">
+                  <small id="getReportToHelp" class="form-text text-muted">Datum/Zeit im Format DD.MM.YYYY hh:mm angeben</small>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="getReportFields">Felder</label>
+                  <select name="fields[]" id="getReportFields" class="form-control" multiple>
+                    <option>correlationId</option>
+                    <option>endToEndReferenceNumber</option>
+                    <option>transactionTypeId</option>
+                    <option>transactionDate</option>
+                    <option>valueDate</option>
+                    <option>contractId</option>
+                    <option>merchantId</option>
+                    <option>merchantName</option>
+                    <option>merchantIban</option>
+                    <option>merchantReference</option>
+                    <option>merchantTransactionReferenceNumber</option>
+                    <option>merchantBankId</option>
+                    <option>buyerBankId</option>
+                    <option>buyerBankName</option>
+                    <option>transactionAmount</option>
+                    <option>transactionCurrency</option>
+                    <option>bankIntermediaryId</option>
+                    <option>bankIntermediaryName</option>
+                    <option>shopId</option>
+                    <option>shopName</option>
+                    <option>ageVerificationStatus</option>
+                    <option>MCC</option>
+                    <option>DBI</option>
+                    <option>paydirektExpress</option>
+                    <option>checkoutId</option>
+                    <option>checkoutInvoiceNr</option>
+                    <option>captureInvoiceNr</option>
+                    <option>reconciliationReferenceNr</option>
+                    <option>paymentInformationId</option>
+                    <option>refundReason</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="getReportReconciliationReferences">Reconciliationnummern</label>
+                  <input type="text" name="reconciliationReferences" id="getReportReconciliationReferences" class="form-control" placeholder="Reconciliationnummern" aria-describedby="reconciliationReferencesHelp">
+                  <small id="reconciliationReferencesHelp" class="form-text text-muted">Reconciliationnummern separiert mit "," angeben</small>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="getReportPaymentInformationIds">PaymentInformationIds</label>
+                  <input type="text" name="paymentInformationIds" id="getReportPaymentInformationIds" class="form-control" placeholder="PaymentInformationIds" aria-describedby="paymentInformationIdsHelp">
+                  <small id="paymentInformationIdsHelp" class="form-text text-muted">PaymentInformationIds separiert mit "," angeben</small>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="getReportMerchantReferenceNumbers">Bestellnummern</label>
+                  <input type="text" name="merchantReferenceNumbers" id="getReportMerchantReferenceNumbers" class="form-control" placeholder="Bestellnummern" aria-describedby="merchantReferenceNumbersHelp">
+                  <small id="merchantReferenceNumbersHelp" class="form-text text-muted">Bestellnummern separiert mit "," angeben</small>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="getReportCheckoutInvoiceNumbers">Rechnungsnummern</label>
+                  <input type="text" name="checkoutInvoiceNumbers" id="getReportCheckoutInvoiceNumbers" class="form-control" placeholder="Rechnungsnummern" aria-describedby="checkoutInvoiceNumbersHelp">
+                  <small id="checkoutInvoiceNumbersHelp" class="form-text text-muted">Rechnungsnummern separiert mit "," angeben</small>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="getReportCaptureInvoiceNumbers">Rechnungsnummern Captures</label>
+                  <input type="text" name="captureInvoiceNumbers" id="getReportCaptureInvoiceNumbers" class="form-control" placeholder="Rechnungsnummern Captures" aria-describedby="captureInvoiceNumbersHelp">
+                  <small id="captureInvoiceNumbersHelp" class="form-text text-muted">Rechnungsnummern Captures separiert mit "," angeben</small>
+                </div>
+              </div>
+              <div class="form-row align-items-center">
+                <div class="col-auto">
+                  <button type="button" id="getReport" class="btn btn-success mb-2">Report abrufen</button>
+                </div>
+                <div class="col-auto">
+                  <div class="form-check form-check-inline custom-control custom-checkbox mb-2">
+                    <input type="radio" name="reportType" id="getReportJsonReport" class="custom-control-input" value="application/json" checked>
+                    <label for="getReportJsonReport" class="custom-control-label">JSON</label>
+                  </div>
+                </div>
+                <!-- to implement -->
+                <div class="col-auto">
+                  <div class="form-check form-check-inline custom-control custom-checkbox mb-2">
+                    <input type="radio" name="reportType" id="getReportCsvReport" class="custom-control-input" value="text/csv">
+                    <label for="getReportCsvReport" class="custom-control-label">CSV</label>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          
+          <div id="accounts">
+            <h2 class="h2">Retrieve Account Information</h2>
+            <hr class="mb-6">
+            <form id="getAccountsForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="getAccountsAccountId">Account ID</label>
+                  <input type="text" name="accountId" id="getAccountsAccountId" class="form-control" placeholder="Account ID" required>
+                </div>
+              </div>
+              <button type="button" id="getAccountsStatus" class="btn btn-success">Accountstatus abrufen</button>
+              <button type="button" id="getAccountsCreditSum" class="btn btn-success">Guthaben abrufen</button>
+              <button type="button" id="getAccountsTransactions" class="btn btn-success">Transaktionen abrufen</button>
+            </form>
+          </div>
+          
+          <div id="log">
+            <h2 class="h2">Log</h2>
+            <hr class="mb-6">
+            <button type="button" id="eraseLog" class="btn btn-primary">Log leeren</button>
+          </div>
+          
+          <div id="success">
+            <h2 class="h2">Success</h2>
+            <hr class="mb-6">
+            <div class="row align-items-center justify-content-center">
+              <div class="col"><span data-feather="check-circle"></span> Payment/Authorization successful</div>
+            </div>
+          </div>
+          <div id="cancel">
+            <h2 class="h2">Cancel</h2>
+            <hr class="mb-6">
+            <div class="row align-items-center justify-content-center">
+              <div class="col"><span data-feather="x-circle"></span> Payment/Authorization cancelled</div>
+            </div>
+          </div>
+          <div id="failure">
+            <h2 class="h2">Failure</h2>
+            <hr class="mb-6">
+            <div class="row align-items-center justify-content-center">
+              <div class="col"><span data-feather="x-circle"></span> Payment/Authorization failed</div>
+            </div>
+          </div>
+          <div id="reject">
+            <h2 class="h2">Reject</h2>
+            <hr class="mb-6">
+            <div class="row align-items-center justify-content-center">
+              <div class="col"><span data-feather="x-circle"></span> Payment rejected by bank</div>
+            </div>
+          </div>
+          <div id="age">
+            <h2 class="h2">Failure</h2>
+            <hr class="mb-6">
+            <div class="row align-items-center justify-content-center">
+              <div class="col"><span data-feather="x-circle"></span> Age verification failed</div>
+            </div>
+          </div>
+          <div id="shippingTerms">
+            <h2 class="h2">Shipping Terms</h2>
+            <hr class="mb-6">
+            <div class="row align-items-center justify-content-center">
+              <div class="col">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec convallis facilisis dolor eget vehicula. Duis sit amet ex tempus, cursus neque et, dapibus leo. Etiam consequat tempor eleifend. Sed ut neque ante. Maecenas dictum, libero id luctus congue, nunc leo scelerisque est, et maximus nisl purus et velit. Vivamus hendrerit eu felis fermentum pharetra. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris pharetra vestibulum molestie. Ut at velit at nibh porttitor ultrices eu nec diam. Integer dictum porttitor lacinia. Vestibulum molestie pellentesque quam, vitae ultricies risus consectetur at. Donec auctor fringilla libero sed rhoncus. Proin feugiat, diam et cursus suscipit, tellus turpis placerat nulla, nec fringilla odio tortor non magna. Quisque porttitor porttitor felis, sit amet vestibulum felis luctus vel. Cras urna nunc, placerat quis aliquam id, luctus sit amet lorem.
+
+                Nam felis mauris, iaculis eu placerat non, lacinia sed eros. Integer rhoncus dui risus, vitae ultrices nisl lacinia in. Aliquam vitae metus felis. Aliquam sit amet arcu sit amet sapien bibendum interdum. Nam at quam in neque ultricies sodales. Aliquam non commodo risus, quis ornare sem. Sed risus lorem, pulvinar sed risus quis, convallis tincidunt orci. Morbi tortor risus, pretium in fermentum pharetra, porttitor nec sapien. Aenean aliquet vehicula molestie. Ut vel massa vel elit accumsan laoreet a quis purus. Etiam vel dictum ex. Duis hendrerit turpis purus, vel lacinia augue porta non.
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  
+    <!-- Bootstrap-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/customFunctions.js"></script>
+    
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+    
+  </body>
+</html>

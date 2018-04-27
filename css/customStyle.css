@@ -1,0 +1,17 @@
+#settings, #authentication, #shipping-address, #customer-authorization-post, #customer-authorization-get, #merchant-authorization-get, #checkout-post, #checkout-execute, #checkout-get, #deliveryInformation-update, #invoiceReference-update, #capture-post, #capture-get, #refund-post, #refund-get, #order-close, #reports, #accounts, #log, #success, #cancel, #failure, #reject, #age, #shippingTerms {
+    display: none;
+}
+#settings:target, #authentication:target, #shipping-address:target, #customer-authorization-post:target, #customer-authorization-get:target, #merchant-authorization-get:target, #checkout-post:target, #checkout-execute:target, #checkout-get:target, #deliveryInformation-update:target, #invoiceReference-update:target, #capture-post:target, #capture-get:target, #refund-post:target, #refund-get:target, #order-close:target, #reports:target, #accounts:target, #log:target, #success:target, #cancel:target, #failure:target, #reject:target, #age:target, #shippingTerms:target {
+    display: block;
+}
+.indent {
+    margin: 1em;
+}
+#output:empty {
+    display: none;
+}
+#output {
+    font-family: monospace;
+    font-size: 150%;
+    white-space: pre-wrap;
+}
