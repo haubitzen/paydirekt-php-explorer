@@ -2,7 +2,7 @@
   <head>
     <script>
       function ajaxLoad(event) {
-        //var ajaxResponse = checkIfJson(event.target.responseText);
+        var ajaxResponse = event.target.responseText;
         console.log(ajaxResponse);
         if (ajaxResponse.redirect) {
           console.log("redirecting...");
