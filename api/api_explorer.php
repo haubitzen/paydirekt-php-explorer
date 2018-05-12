@@ -880,7 +880,9 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			break;
 		case "paylink":
 		  $payId = $_GET["id"];
+		  echo $payId;
 		  //$payId = 5;
+		  /*
 			$userAction = TokenObtain::autoToken();
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
@@ -890,6 +892,7 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			$approveCheckout = $checkout["_links"]["approve"]["href"];
 			echo json_encode(array("redirect" => $approveCheckout));
 			//print_r(json_decode($userAction));
+			*/
 			break;
 		default:
 			echo '{"notify": "Keine Aktion uebergeben"}';
