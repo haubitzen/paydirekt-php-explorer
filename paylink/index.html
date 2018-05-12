@@ -40,7 +40,7 @@
         req = new FormData();
         req.append("action", "paylink");
         req.append("payId", payId);
-        ajaxRequest.open("get", "../api/api_explorer.php");
+        ajaxRequest.open("post", "../api/api_explorer.php");
         ajaxRequest.send(req);
       }
     </script>
