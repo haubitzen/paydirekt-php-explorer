@@ -885,10 +885,13 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			$userAction = TokenObtain::autoToken();
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
-			$redirect = true;
-			$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"],$payId);
-			$checkout = json_decode($userAction, true);
-			$approveCheckout = $checkout["_links"]["approve"]["href"];
+			$paymentsData = file_get_contents('payments.json');
+		  $paymentsJson = json_decode($paymentsData, true);
+		  echo $paymentsJson;
+			//$redirect = true;
+			//$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"],$payId);
+			//$checkout = json_decode($userAction, true);
+			//$approveCheckout = $checkout["_links"]["approve"]["href"];
 			//echo json_encode(array("redirect" => $approveCheckout));
 			//print_r(json_decode($userAction));
 			break;
