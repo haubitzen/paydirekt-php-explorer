@@ -360,9 +360,8 @@ class Checkout {
 		$paymentsData = file_get_contents('../paylink/payments.json');
 		$paymentsJson = json_decode($paymentsData, true);
 		$payment = array_search($payId, array_column($paymentsJson['payments'], 'id'));
-		echo $paymentsJson['payments'][$payment]['totalAmount'];
-		//$payload['totalAmount'] = $paymentsJson['payments'][$payment][$totalAmount];
-		$payload['merchantOrderReferenceNumber'] = "order123";
+		$payload['totalAmount'] = $paymentsJson['payments'][$payment]['totalAmount'];
+		//$payload['merchantOrderReferenceNumber'] = "order123";
 		$payload['type'] = "DIRECT_SALE";
 		$payload['express'] = "true";
 		$payload['currency'] = "EUR";
@@ -887,13 +886,11 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
 			$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"],$payId);
-			/*
 			$checkout = json_decode($userAction, true);
 			$_SESSION["checkoutId"] = $checkout["checkoutId"];
 			$approveCheckout = $checkout["_links"]["approve"]["href"];
 			echo json_encode(array("redirect" => $approveCheckout));
 			//print_r(json_decode($userAction));
-			*/
 			break;
 		default:
 			echo '{"notify": "Keine Aktion uebergeben"}';
