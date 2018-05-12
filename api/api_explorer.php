@@ -356,13 +356,13 @@ class Checkout {
 		array_push($header, "Accept: " ."application/hal+json");
 		array_push($header, "Date: " .$timestamp);
 		
+		$payload = array();
 		$paymentsData = file_get_contents('../paylink/payments.json');
 		$paymentsJson = json_decode($paymentsData, true);
-		//$payment = array_search($payId, array_column($paymentsJson, 'id'));
-		$keys = array_column($paymentsJson['payments'], 'id');
-		print_r($keys);
-		//$paymentsJson['payments'][$x]['id']
-		$payload = array();
+		$payment = array_search($payId, array_column($paymentsJson['payments'], 'id'));
+		echo $paymentsJson['payments'][$payment]['totalAmount'];
+		//$payload['totalAmount'] = $paymentsJson['payments'][$payment][$totalAmount];
+		$payload['merchantOrderReferenceNumber'] = "order123";
 		$payload['type'] = "DIRECT_SALE";
 		$payload['express'] = "true";
 		$payload['currency'] = "EUR";
@@ -371,8 +371,6 @@ class Checkout {
     $payload['redirectUrlAfterRejection'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#reject";
     $payload['callbackUrlCheckDestinations'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/api/expressCallback.php";
     $payload['webUrlShippingTerms'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#shippingTerms";
-    $payload['merchantOrderReferenceNumber'] = "order123";
-    $payload['totalAmount'] = "15";
 		
 		$payload = json_encode($payload);
 		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
