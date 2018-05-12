@@ -358,8 +358,8 @@ class Checkout {
 		
 		$paymentsData = file_get_contents('../paylink/payments.json');
 		$paymentsJson = json_decode($paymentsData, true);
-		echo $payId;
 		$payment = array_search($payId, $paymentsJson);
+		echo $payment;
 		//$paymentsJson['payments'][$x]['id']
 		$payload = array();
 		$payload['type'] = "DIRECT_SALE";
