@@ -58,7 +58,7 @@ class Signature {
 
 	public function stringToSign($requestID, $timestamp, $APIKEY, $randomNonce) {
 		$stringtosign = $requestID .":" .$timestamp .":" .$APIKEY .":" .$randomNonce;
-		echo "String-To-Sign: " . $stringtosign . "\n\n";
+		//echo "String-To-Sign: " . $stringtosign . "\n\n";
 		return $stringtosign;
 	}
 
@@ -67,7 +67,7 @@ class Signature {
 		$apiSecretDecoded = Base64Url::safeDecode($APISECRET);
 		$hash = hash_hmac("sha256", $stringtosign, $apiSecretDecoded, true);
 		$signature = Base64Url::safeEncode($hash);
-    echo "Encoded Signature: " . $signature . "\n\n";
+    //echo "Encoded Signature: " . $signature . "\n\n";
 		return $signature;
 	}
 }
@@ -341,6 +341,33 @@ class Checkout {
 				$payload[$key] = $value;
 			}
 		}
+		
+		$payload = json_encode($payload);
+		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
+	}
+	
+	public function createPaylinkCheckout($token) {
+		//$requestID = UUID::createUUID();
+		$timestamp = gmdate(DATE_RFC1123, time());
+		$header = array();
+		array_push($header, "Authorization: " ."Bearer " .$token);
+		//array_push($header, "X-Request-ID: " .$requestID);
+		array_push($header, "Content-Type: " ."application/hal+json;charset=utf-8");
+		array_push($header, "Accept: " ."application/hal+json");
+		array_push($header, "Date: " .$timestamp);
+		
+		$payload = array();
+		
+		$payload['type'] = "DIRECT_SALE";
+		$payload['express'] = "true";
+		$payload['currency'] = "EUR";
+    $payload['redirectUrlAfterSuccess'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#success";
+    $payload['redirectUrlAfterCancellation'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#cancel";
+    $payload['redirectUrlAfterRejection'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#reject";
+    $payload['callbackUrlCheckDestinations'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/api/expressCallback.php";
+    $payload['webUrlShippingTerms'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#shippingTerms";
+    $payload['merchantOrderReferenceNumber'] = "order123";
+    $payload['totalAmount'] = "15";
 		
 		$payload = json_encode($payload);
 		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
@@ -830,11 +857,14 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			break;
 		case "paylink":
 			$userAction = TokenObtain::autoToken();
-			echo $userAction;
-			//$token = json_decode($userAction, true);
-			//$_SESSION["access_token"] = $token["access_token"];
-			//$_SESSION["token_expiry"] = time()+$token["expires_in"];
-			//echo $userAction;
+			$token = json_decode($userAction, true);
+			$_SESSION["access_token"] = $token["access_token"];
+			$redirect = true;
+			
+			$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"]);
+			$checkout = json_decode($userAction, true);
+			$approveCheckout = $checkout["_links"]["approve"]["href"];
+			echo json_encode(array("redirect" => $approveCheckout));
 			//print_r(json_decode($userAction));
 			break;
 		default:
