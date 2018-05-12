@@ -365,7 +365,7 @@ class Checkout {
 		$payload['totalAmount'] = $paymentsJson['payments'][$payment]['totalAmount'];
 		$payload['merchantOrderReferenceNumber'] = "order123";
 		$payload['currency'] = "EUR";
-    $payload['redirectUrlAfterSuccess'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/executePaylink.html";
+    $payload['redirectUrlAfterSuccess'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/paylink/executePaylink.html";
     $payload['redirectUrlAfterCancellation'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#cancel";
     $payload['redirectUrlAfterRejection'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#reject";
     $payload['callbackUrlCheckDestinations'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/api/expressCallback.php";
