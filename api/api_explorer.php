@@ -879,8 +879,8 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			echo '{"notify": "Log geleert"}';
 			break;
 		case "paylink":
-		  //$payId = $_GET["id"];
-		  $payId = 5;
+		  $payId = $_GET["id"];
+		  //$payId = 5;
 			$userAction = TokenObtain::autoToken();
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
