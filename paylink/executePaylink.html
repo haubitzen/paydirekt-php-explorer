@@ -1,0 +1,48 @@
+<html>
+  <head>
+    <script>
+      function ajaxLoad(event) {
+        var ajaxResponse = checkIfJson(event.target.responseText);
+        console.log(ajaxResponse);
+        if (ajaxResponse.redirect) {
+          console.log("redirecting...");
+        } else if (ajaxResponse.notify) {
+          output.innerHTML = ajaxResponse.notify;
+        } else {
+          output.innerHTML = ajaxResponse;
+        }
+        if (ajaxResponse.redirect) {
+          window.location.href = ajaxResponse.redirect;
+        }
+      }
+
+      function ajaxError(event) {
+        output.innerHTML = event.target.statusText;
+      }
+      
+      function checkIfJson(string) {
+        try {
+          JSON.parse(string);
+        } catch (error) {
+          return string;
+        }
+        return JSON.parse(string);
+        //return JSON.stringify(JSON.parse(string),null,2);
+      }
+      
+      window.onload = function () {
+        var ajaxRequest = new XMLHttpRequest();
+        var req;
+        ajaxRequest.addEventListener("load", ajaxLoad);
+        ajaxRequest.addEventListener("error", ajaxError);
+        req = new FormData();
+        req.append("action", "executePaylinkCheckout");
+        ajaxRequest.open("post", "../api/api_explorer.php");
+        ajaxRequest.send(req);
+      }
+    </script>
+  </head>
+  <body>
+    <pre id="output"></pre>
+  </body>
+</html>

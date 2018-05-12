@@ -365,7 +365,7 @@ class Checkout {
 		$payload['totalAmount'] = $paymentsJson['payments'][$payment]['totalAmount'];
 		$payload['merchantOrderReferenceNumber'] = "order123";
 		$payload['currency'] = "EUR";
-    $payload['redirectUrlAfterSuccess'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/executePaylink";
+    $payload['redirectUrlAfterSuccess'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/executePaylink.html";
     $payload['redirectUrlAfterCancellation'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#cancel";
     $payload['redirectUrlAfterRejection'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#reject";
     $payload['callbackUrlCheckDestinations'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/api/expressCallback.php";
@@ -889,6 +889,10 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			$approveCheckout = $checkout["_links"]["approve"]["href"];
 			echo json_encode(array("redirect" => $approveCheckout));
 			//print_r(json_decode($userAction));
+			break;
+		case "executePaylinkCheckout":
+			$userAction = Checkout::executePaylinkCheckout($_SESSION["access_token"], $_SESSION["checkoutId"]);
+			echo '{"notify": "Bestellung bestätigt"}';
 			break;
 		default:
 			echo '{"notify": "Keine Aktion uebergeben"}';
