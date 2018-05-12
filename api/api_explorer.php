@@ -358,9 +358,11 @@ class Checkout {
 		
 		$paymentsData = file_get_contents('../paylink/payments.json');
 		$paymentsJson = json_decode($paymentsData, true);
-		$currentId = 0;
-		echo $paymentsJson['payments'][0]['id'];
-		//while ($paymentsJson['id'] <> )
+		echo $payId;
+		//$x = 0;
+		//while ($paymentsJson['payments'][$x]['id'] !=  $payId) {
+		//
+		//}
 		$payload = array();
 		$payload['type'] = "DIRECT_SALE";
 		$payload['express'] = "true";
