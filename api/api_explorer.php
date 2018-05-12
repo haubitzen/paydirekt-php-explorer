@@ -370,9 +370,7 @@ class Checkout {
     $payload['redirectUrlAfterRejection'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#reject";
     $payload['callbackUrlCheckDestinations'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/api/expressCallback.php";
     $payload['webUrlShippingTerms'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#shippingTerms";
-		print_r($payload);
-		$payload = json_encode($payload, JSON_UNESCAPED_SLASHES);
-		print_r($payload);
+		$payload = json_encode($payload);
 		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
 	}
 
@@ -883,12 +881,10 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 		case "paylink":
 		  //$payId = $_GET["id"];
 		  $payId = 5;
-		  $redirect = "true";
 			$userAction = TokenObtain::autoToken();
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
 			$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"],$payId);
-			print_r($userAction);
 			$checkout = json_decode($userAction, true);
 			$_SESSION["checkoutId"] = $checkout["checkoutId"];
 			$approveCheckout = $checkout["_links"]["approve"]["href"];
