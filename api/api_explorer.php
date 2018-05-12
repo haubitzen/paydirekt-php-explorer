@@ -360,17 +360,17 @@ class Checkout {
 		$paymentsData = file_get_contents('../paylink/payments.json');
 		$paymentsJson = json_decode($paymentsData, true);
 		$payment = array_search($payId, array_column($paymentsJson['payments'], 'id'));
-		$payload['totalAmount'] = $paymentsJson['payments'][$payment]['totalAmount'];
-		$payload['merchantOrderReferenceNumber'] = "order123";
 		$payload['type'] = "DIRECT_SALE";
 		$payload['express'] = "true";
+		$payload['totalAmount'] = $paymentsJson['payments'][$payment]['totalAmount'];
+		$payload['merchantOrderReferenceNumber'] = "order123";
 		$payload['currency'] = "EUR";
     $payload['redirectUrlAfterSuccess'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/executePaylink";
     $payload['redirectUrlAfterCancellation'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#cancel";
     $payload['redirectUrlAfterRejection'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#reject";
     $payload['callbackUrlCheckDestinations'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/api/expressCallback.php";
     $payload['webUrlShippingTerms'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#shippingTerms";
-		
+		print_r($payload);
 		$payload = json_encode($payload);
 		print_r($payload);
 		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
