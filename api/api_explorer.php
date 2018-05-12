@@ -886,8 +886,9 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
 			$paymentsData = file_get_contents('payments.json');
-		  $paymentsJson = json_decode($paymentsData, true);
-		  echo $paymentsJson;
+		  echo $paymentsData;
+		  //$paymentsJson = json_decode($paymentsData, true);
+		  //echo $paymentsJson;
 			//$redirect = true;
 			//$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"],$payId);
 			//$checkout = json_decode($userAction, true);
