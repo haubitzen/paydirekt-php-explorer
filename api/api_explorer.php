@@ -372,8 +372,7 @@ class Checkout {
     $payload['webUrlShippingTerms'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#shippingTerms";
 		
 		$payload = json_encode($payload);
-		print_r($payload);
-		//return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
+		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
 	}
 
 	public function executeCheckout($token) {
@@ -888,6 +887,7 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
 			$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"],$payId);
+			print_r($userAction);
 			$checkout = json_decode($userAction, true);
 			$_SESSION["checkoutId"] = $checkout["checkoutId"];
 			$approveCheckout = $checkout["_links"]["approve"]["href"];
