@@ -1,5 +1,7 @@
 <?php
 
+$apiSettings = parse_ini_file("settings.ini");
+
 class Random {
 	private function __construct() {
 	}

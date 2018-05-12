@@ -1,0 +1,8 @@
+{
+  "payments": [
+    {"id": "1", "totalAmount": "15", "merchantOrderReferenceNumber": "order1"},
+    {"id": "2", "totalAmount": "5", "merchantOrderReferenceNumber": "order2"},
+    {"id": "3", "totalAmount": "34,99", "merchantOrderReferenceNumber": "order3"},
+    {"id": "4", "totalAmount": "50,06", "merchantOrderReferenceNumber": "order4"}
+    ]
+}
