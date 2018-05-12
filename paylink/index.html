@@ -31,14 +31,19 @@
       }
       
       window.onload = function () {
+        var query = window.location.search.substring(1);
+        var qs = parse_query_string(query);
+        console.log(qs);
+        /*
         var ajaxRequest = new XMLHttpRequest();
         var req;
         ajaxRequest.addEventListener("load", ajaxLoad);
         ajaxRequest.addEventListener("error", ajaxError);
         req = new FormData();
         req.append("action", "paylink");
-        ajaxRequest.open("get", "../api/api_explorer.php?id=id");
+        ajaxRequest.open("get", "../api/api_explorer.php");
         ajaxRequest.send(req);
+        */
       }
     </script>
   </head>
