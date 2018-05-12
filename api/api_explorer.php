@@ -372,7 +372,8 @@ class Checkout {
     $payload['webUrlShippingTerms'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#shippingTerms";
 		
 		$payload = json_encode($payload);
-		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
+		print_r($payload);
+		//return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
 	}
 
 	public function executeCheckout($token) {
