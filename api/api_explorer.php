@@ -889,7 +889,7 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"],$payId);
 			$checkout = json_decode($userAction, true);
 			$approveCheckout = $checkout["_links"]["approve"]["href"];
-			echo json_encode(array("redirect" => $approveCheckout));
+			//echo json_encode(array("redirect" => $approveCheckout));
 			//print_r(json_decode($userAction));
 			break;
 		default:
