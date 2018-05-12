@@ -356,7 +356,7 @@ class Checkout {
 		array_push($header, "Accept: " ."application/hal+json");
 		array_push($header, "Date: " .$timestamp);
 		
-		$paymentsData = file_get_contents('payments.json');
+		$paymentsData = file_get_contents('../paylink/payments.json');
 		$paymentsJson = json_decode($paymentsData, true);
 		echo $paymentsJson;
 		//while ($paymentsJson['id'] <> )
@@ -885,16 +885,14 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			$userAction = TokenObtain::autoToken();
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
-			$paymentsData = file_get_contents('payments.json');
-		  echo $paymentsData;
-		  //$paymentsJson = json_decode($paymentsData, true);
-		  //echo $paymentsJson;
-			//$redirect = true;
-			//$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"],$payId);
-			//$checkout = json_decode($userAction, true);
-			//$approveCheckout = $checkout["_links"]["approve"]["href"];
-			//echo json_encode(array("redirect" => $approveCheckout));
+			$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"],$payId);
+			/*
+			$checkout = json_decode($userAction, true);
+			$_SESSION["checkoutId"] = $checkout["checkoutId"];
+			$approveCheckout = $checkout["_links"]["approve"]["href"];
+			echo json_encode(array("redirect" => $approveCheckout));
 			//print_r(json_decode($userAction));
+			*/
 			break;
 		default:
 			echo '{"notify": "Keine Aktion uebergeben"}';
