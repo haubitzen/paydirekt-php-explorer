@@ -359,10 +359,8 @@ class Checkout {
 		$paymentsData = file_get_contents('../paylink/payments.json');
 		$paymentsJson = json_decode($paymentsData, true);
 		echo $payId;
-		//$x = 0;
-		//while ($paymentsJson['payments'][$x]['id'] !=  $payId) {
-		//
-		//}
+		$payment = array_search($payId, $paymentsJson);
+		//$paymentsJson['payments'][$x]['id']
 		$payload = array();
 		$payload['type'] = "DIRECT_SALE";
 		$payload['express'] = "true";
@@ -884,7 +882,8 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			echo '{"notify": "Log geleert"}';
 			break;
 		case "paylink":
-		  $payId = $_GET["id"];
+		  //$payId = $_GET["id"];
+		  $payId = 5;
 			$userAction = TokenObtain::autoToken();
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
