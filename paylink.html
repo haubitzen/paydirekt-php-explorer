@@ -2,7 +2,7 @@
   <head>
     <script>
       function ajaxLoad(event) {
-        var ajaxResponse = event.target.responseText;
+        var ajaxResponse = checkIfJson(event.target.responseText);
         console.log(ajaxResponse);
         if (ajaxResponse.redirect) {
           console.log("redirecting...");
@@ -18,6 +18,16 @@
 
       function ajaxError(event) {
         output.innerHTML = event.target.statusText;
+      }
+      
+      function checkIfJson(string) {
+        try {
+          JSON.parse(string);
+        } catch (error) {
+          return string;
+        }
+        return JSON.parse(string);
+        //return JSON.stringify(JSON.parse(string),null,2);
       }
       
       window.onload = function () {
