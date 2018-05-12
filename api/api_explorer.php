@@ -1,7 +1,5 @@
 <?php
 
-$apiSettings = parse_ini_file("settings.ini");
-
 class Random {
 	private function __construct() {
 	}
@@ -126,6 +124,58 @@ class TokenObtain {
         );
         $body = json_encode($body);
 		return Curl::runCurl($header, $body, self::sbxTokenObtainEndpoint, "POST");
+	}
+	
+	public function autoToken() {
+	  $apiSettings = parse_ini_file("settings.ini");
+	  echo $apiSettings["webApiKey"];
+	  /*
+		$APIKEY = $_POST["apiKey"];
+		$APISECRET = $_POST["apiSecret"];
+		if (!empty($_POST["pspApiKey"])) {
+		  $PSPAPIKEY = $_POST["pspApiKey"];
+		}
+		if (!empty($_POST["pspApiSecret"])) {
+		  $PSPAPISECRET = $_POST["pspApiSecret"];
+		}
+		$requestID = UUID::createUUID();
+		$randomNonce = RandomNonce::nonce();
+		$now = time();
+		$timestamp = gmdate("YmdHis",$now);
+		$signature = Signature::hashSignature($requestID, $APIKEY, $timestamp, $randomNonce, $APISECRET);
+		if ($PSPAPIKEY && $PSPAPISECRET) {
+		  $pspSignature = Signature::hashSignature($requestID, $PSPAPIKEY, $timestamp, $randomNonce, $PSPAPISECRET);
+		}
+		$timestamp = gmdate(DATE_RFC1123, $now);
+		$header = array();
+		if ($_POST["action"] == "postTokenObtainTp") {
+		  array_push($header, "X-Auth-Key-TP: " .$APIKEY);
+		  array_push($header, "X-Auth-Code-TP: " .$signature);
+		} else {
+		  array_push($header, "X-Auth-Key: " .$APIKEY);
+		  array_push($header, "X-Auth-Code: " .$signature);
+		}
+		if ($PSPAPIKEY && $PSPAPISECRET) {
+		  array_push($header, "X-Auth-Key-PSP: " .$PSPAPIKEY);
+		  array_push($header, "X-Auth-Code-PSP: " .$pspSignature);
+		}
+		array_push($header, "X-Request-ID: " .$requestID);
+		array_push($header, "X-Date: " .$timestamp);
+		array_push($header, "Content-Type: " ."application/hal+json;charset=utf-8");
+		array_push($header, "Accept: " ."application/hal+json");
+		if ($_POST["customerAuthorizationReference"]) {
+		  array_push($header, "X-Auth-Customer-Ref: " .$_POST["customerAuthorizationReference"]);
+		}
+		if ($_POST["merchantAuthorizationReference"]) {
+		  array_push($header, "X-Auth-Merchant-Ref: " .$_POST["merchantAuthorizationReference"]);
+		}
+		$body = array(
+            "grantType" => "api_key",
+            "randomNonce" => $randomNonce
+        );
+        $body = json_encode($body);
+		return Curl::runCurl($header, $body, self::sbxTokenObtainEndpoint, "POST");
+		*/
 	}
 }
 
@@ -805,6 +855,13 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			$userAction = file_put_contents("../log/callbackUrlStatusUpdates.log", "");
 			echo '{"notify": "Log geleert"}';
 			break;
+		case "paylink":
+			$userAction = TokenObtain::autoToken();
+			//$token = json_decode($userAction, true);
+			//$_SESSION["access_token"] = $token["access_token"];
+			//$_SESSION["token_expiry"] = time()+$token["expires_in"];
+			//echo $userAction;
+			//print_r(json_decode($userAction));
 		default:
 			echo '{"notify": "Keine Aktion uebergeben"}';
 	}
