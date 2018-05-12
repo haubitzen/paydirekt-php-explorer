@@ -361,7 +361,7 @@ class Checkout {
 		$paymentsJson = json_decode($paymentsData, true);
 		$payment = array_search($payId, array_column($paymentsJson['payments'], 'id'));
 		$payload['totalAmount'] = $paymentsJson['payments'][$payment]['totalAmount'];
-		//$payload['merchantOrderReferenceNumber'] = "order123";
+		$payload['merchantOrderReferenceNumber'] = "order123";
 		$payload['type'] = "DIRECT_SALE";
 		$payload['express'] = "true";
 		$payload['currency'] = "EUR";
@@ -882,6 +882,7 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 		case "paylink":
 		  //$payId = $_GET["id"];
 		  $payId = 5;
+		  $redirect = "true";
 			$userAction = TokenObtain::autoToken();
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
