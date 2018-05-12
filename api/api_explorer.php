@@ -346,7 +346,7 @@ class Checkout {
 		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
 	}
 	
-	public function createPaylinkCheckout($token) {
+	public function createPaylinkCheckout($token, $payId) {
 		//$requestID = UUID::createUUID();
 		$timestamp = gmdate(DATE_RFC1123, time());
 		$header = array();
@@ -356,8 +356,11 @@ class Checkout {
 		array_push($header, "Accept: " ."application/hal+json");
 		array_push($header, "Date: " .$timestamp);
 		
+		$paymentsData = file_get_contents('payments.json');
+		$paymentsJson = json_decode($paymentsData, true);
+		echo $paymentsJson;
+		//while ($paymentsJson['id'] <> )
 		$payload = array();
-		
 		$payload['type'] = "DIRECT_SALE";
 		$payload['express'] = "true";
 		$payload['currency'] = "EUR";
@@ -878,12 +881,12 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			echo '{"notify": "Log geleert"}';
 			break;
 		case "paylink":
+		  $payId = $_GET["id"];
 			$userAction = TokenObtain::autoToken();
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
 			$redirect = true;
-			
-			$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"]);
+			$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"],$payId);
 			$checkout = json_decode($userAction, true);
 			$approveCheckout = $checkout["_links"]["approve"]["href"];
 			echo json_encode(array("redirect" => $approveCheckout));
