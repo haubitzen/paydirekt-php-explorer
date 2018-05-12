@@ -371,7 +371,7 @@ class Checkout {
     $payload['callbackUrlCheckDestinations'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/api/expressCallback.php";
     $payload['webUrlShippingTerms'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#shippingTerms";
 		print_r($payload);
-		$payload = json_encode($payload);
+		$payload = json_encode($payload, JSON_UNESCAPED_SLASHES);
 		print_r($payload);
 		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
 	}
