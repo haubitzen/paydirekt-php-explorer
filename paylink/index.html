@@ -32,17 +32,16 @@
       
       window.onload = function () {
         var urlParams = new URLSearchParams(window.location.search);
-        console.log(urlParams.get('id'));
-        /*
+        var payId = urlParams.get('id'));
         var ajaxRequest = new XMLHttpRequest();
         var req;
         ajaxRequest.addEventListener("load", ajaxLoad);
         ajaxRequest.addEventListener("error", ajaxError);
         req = new FormData();
         req.append("action", "paylink");
+        req.append("payId", payId);
         ajaxRequest.open("get", "../api/api_explorer.php");
         ajaxRequest.send(req);
-        */
       }
     </script>
   </head>

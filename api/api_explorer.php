@@ -879,7 +879,7 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			echo '{"notify": "Log geleert"}';
 			break;
 		case "paylink":
-		  $payId = $_GET["id"];
+		  $payId = $_POST["payId"];
 		  echo $payId;
 		  //$payId = 5;
 		  /*
