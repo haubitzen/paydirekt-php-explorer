@@ -128,8 +128,6 @@ class TokenObtain {
 	
 	public function autoToken() {
 	  $apiSettings = parse_ini_file("settings.ini");
-	  echo ;
-
 		$APIKEY = $apiSettings["webApiKey"];
 		$APISECRET = $apiSettings["webApiSecret"];
 		$requestID = UUID::createUUID();
