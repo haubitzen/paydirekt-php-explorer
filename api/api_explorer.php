@@ -361,7 +361,7 @@ class Checkout {
 		$payload['type'] = "DIRECT_SALE";
 		$payload['express'] = "true";
 		$payload['currency'] = "EUR";
-    $payload['redirectUrlAfterSuccess'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#success";
+    $payload['redirectUrlAfterSuccess'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/executePaylink";
     $payload['redirectUrlAfterCancellation'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#cancel";
     $payload['redirectUrlAfterRejection'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#reject";
     $payload['callbackUrlCheckDestinations'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/api/expressCallback.php";
@@ -372,7 +372,7 @@ class Checkout {
 		$payload = json_encode($payload);
 		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
 	}
-	
+
 	public function executeCheckout($token) {
 		//$requestID = UUID::createUUID();
 		$timestamp = gmdate(DATE_RFC1123, time());
@@ -393,7 +393,29 @@ class Checkout {
 		$payload = json_encode($payload);
 		return Curl::runCurl($header, $payload, $endpoint, "POST");
 	}
-
+	
+	public function executePaylinkCheckout($token, $checkoutId) {
+		//$requestID = UUID::createUUID();
+		$timestamp = gmdate(DATE_RFC1123, time());
+		$header = array();
+		array_push($header, "Authorization: " ."Bearer " .$token);
+		//array_push($header, "X-Request-ID: " .$requestID);
+		array_push($header, "Content-Type: " ."application/hal+json;charset=utf-8");
+		array_push($header, "Accept: " ."application/hal+json");
+		array_push($header, "Date: " .$timestamp);
+		
+		$endpoint = self::sbxCheckoutEndpoint . "/" . $checkoutId . "/execute";
+    
+    $now = time();
+		$timestamp = date("Y-m-d",$now);
+    $payload = array();
+    $payload['termsAcceptedTimestamp'] = $timestamp;
+    $payload['merchantOrderReferenceNumber'] = "order123";
+    
+		$payload = json_encode($payload);
+		return Curl::runCurl($header, $payload, $endpoint, "POST");
+	}
+	
 	public function retrieveCheckout($token) {
 		//$requestID = UUID::createUUID();
 		$timestamp = gmdate(DATE_RFC1123, time());

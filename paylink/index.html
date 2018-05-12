@@ -37,7 +37,7 @@
         ajaxRequest.addEventListener("error", ajaxError);
         req = new FormData();
         req.append("action", "paylink");
-        ajaxRequest.open("post", "api/api_explorer.php");
+        ajaxRequest.open("post", "../api/api_explorer.php");
         ajaxRequest.send(req);
       }
     </script>
