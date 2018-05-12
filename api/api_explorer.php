@@ -358,7 +358,7 @@ class Checkout {
 		
 		$paymentsData = file_get_contents('../paylink/payments.json');
 		$paymentsJson = json_decode($paymentsData, true);
-		$payment = array_search($payId, $paymentsJson);
+		$payment = array_search($payId, array_column($paymentsJson, 'id'));
 		echo $payment;
 		//$paymentsJson['payments'][$x]['id']
 		$payload = array();
