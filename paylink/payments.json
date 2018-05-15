@@ -1,8 +1,8 @@
 {
   "payments": [
-    {"id": "1", "totalAmount": "15", "merchantOrderReferenceNumber": "order1"},
-    {"id": "2", "totalAmount": "5", "merchantOrderReferenceNumber": "order2"},
-    {"id": "5", "totalAmount": "34.99", "merchantOrderReferenceNumber": "order3"},
-    {"id": "8", "totalAmount": "50.06", "merchantOrderReferenceNumber": "order4"}
+    {"id": "1", "totalAmount": "15.00", "merchantOrderReferenceNumber": "order1", "claims": 0, "remainingClaims": 1, "validUntil": "inf"},
+    {"id": "2", "totalAmount": "5.00", "merchantOrderReferenceNumber": "order2", "claims": 1, "remainingClaims": 0, "validUntil": "2018-12-01"},
+    {"id": "5", "totalAmount": "34.99", "merchantOrderReferenceNumber": "order3", "claims": 5, "remainingClaims": "inf", "validUntil": "inf"},
+    {"id": "8", "totalAmount": "50.06", "merchantOrderReferenceNumber": "order4", "claims": 0, "remainingClaims": 1, "validUntil": "2018-05-14"}
     ]
 }

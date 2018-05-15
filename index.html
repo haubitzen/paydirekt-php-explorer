@@ -56,6 +56,7 @@
               <li class="nav-item"><a class="nav-link" href="#deliveryInformation-update" id="deliveryInformationUpdateMenu"><span data-feather="package"></span>Update Delivery Information</a></li>
               <li class="nav-item"><a class="nav-link" href="#invoiceReference-update" id="invoiceReferenceMenu"><span data-feather="credit-card"></span>Update Invoice Reference</a></li>
               <li class="nav-item"><a class="nav-link" href="#order-close" id="orderCloseMenu"><span data-feather="trash"></span>Close Checkout</a></li>
+              <li class="nav-item"><a class="nav-link" href="#paylink" id="paylinkMenu"><span data-feather="link"></span>Manage Paylinks</a></li>
             </ul>
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">Capture</h6>
             <ul class="nav flex-column">
@@ -684,6 +685,20 @@
                 </div>
               </div>
               <button type="button" id="postCloseOrder" class="btn btn-success">Bestellung schliessen</button>
+            </form>
+          </div>
+          
+          <div id="paylink-manage">
+            <h2 class="h2">Manage Paylink</h2>
+            <hr class="mb-6">
+            <form id="paylinkForm">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="paylinkId">Paylink ID</label>
+                  <input type="text" name="paylinkId" id="paylinkId" class="form-control" placeholder="Paylink ID" required>
+                </div>
+              </div>
+              <button type="button" id="getPaylink" class="btn btn-success">Paylink abrufen</button>
             </form>
           </div>
             
