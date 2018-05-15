@@ -690,16 +690,52 @@
           </div>
           
           <div id="paylink-manage">
-            <h2 class="h2">Manage Paylink</h2>
+            <h2 class="h2">Create Paylink</h2>
             <hr class="mb-6">
-            <form id="paylinkForm">
+            <form id="postPaylinkForm">
               <div class="form-row">
-                <div class="form-group col-md-4">
-                  <label for="paylinkId">Paylink ID</label>
-                  <input type="text" name="paylinkId" id="paylinkId" class="form-control" placeholder="Paylink ID" required>
+                <div class="form-group col-md-2">
+                  <label for="postPaylinkTotalAmount">Betrag</label>
+                  <input type="text" name="paylinkTotalAmount" id="postPaylinkTotalAmount" class="form-control" placeholder="Betrag">
+                </div>
+                <div class="form-group col-md-3">
+                  <label for="postPaylinkReferenceNumber">Referenznummer</label>
+                  <input type="text" name="paylinkReferenceNumber" id="postPaylinkReferenceNumber" class="form-control" placeholder="Referenznummer">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-3">
+                  <label for="postPaylinkClaims">Claims</label>
+                  <input type="number" name="paylinkClaims" id="postPaylinkClaims" class="form-control" placeholder="Claims">
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="postPaylinkValidUntil">Ablaufdatum</label>
+                  <input type="date" name="paylinkValidUntil" id="postPaylinkValidUntil" class="form-control" placeholder="Ablaufdatum">
+                </div>
+              </div>
+              <button type="button" id="postPaylink" class="btn btn-success">Paylink erstellen</button>
+            </form>
+            <hr class="mb-6">
+            <h2 class="h2">Retrieve Paylink</h2>
+            <form id="getPaylinkForm">
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="getPaylinkId">Paylink ID</label>
+                  <input type="text" name="paylinkId" id="getPaylinkId" class="form-control" placeholder="Paylink ID">
                 </div>
               </div>
               <button type="button" id="getPaylink" class="btn btn-success">Paylink abrufen</button>
+            </form>
+            <hr class="mb-6">
+            <h2 class="h2">Invalidate Paylink</h2>
+            <form id="invalidatePaylinkForm">
+              <div class="form-row">
+                <div class="form-group col-md-2">
+                  <label for="invalidatePaylinkId">Paylink ID</label>
+                  <input type="text" name="paylinkId" id="invalidatePaylinkId" class="form-control" placeholder="Paylink ID">
+                </div>
+              </div>
+              <button type="button" id="invalidatePaylink" class="btn btn-success">Paylink invalidieren</button>
             </form>
           </div>
             
