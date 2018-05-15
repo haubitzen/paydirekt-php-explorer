@@ -646,6 +646,20 @@ class Accounts {
 		$endpoint = self::sbxAccountsEndpoint . "/" . $_POST["accountId"] . "/status";
     return Curl::runCurl($header, false, $endpoint, "GET");
 	}
+	
+	public function retrieveAccountUsername($token) {
+		//$requestID = UUID::createUUID();
+		$timestamp = gmdate(DATE_RFC1123, time());
+		$header = array();
+		array_push($header, "Authorization: " ."Bearer " .$token);
+		//array_push($header, "X-Request-ID: " .$requestID);
+		array_push($header, "Content-Type: " ."application/hal+json;charset=utf-8");
+		array_push($header, "Accept: " ."application/hal+json");
+		array_push($header, "Date: " .$timestamp);
+		
+		$endpoint = self::sbxAccountsEndpoint . "/" . $_POST["accountId"] . "/username";
+    return Curl::runCurl($header, false, $endpoint, "GET");
+	}
   
 	public function retrieveCreditSum($token) {
 		//$requestID = UUID::createUUID();
@@ -860,6 +874,10 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			break;
 		case "getAccountsStatus":
 			$userAction = Accounts::retrieveAccountStatus($_SESSION["access_token"]);
+			print_r(json_decode($userAction));
+			break;
+		case "getAccountsUsername":
+			$userAction = Accounts::retrieveAccountUsername($_SESSION["access_token"]);
 			print_r(json_decode($userAction));
 			break;
 		case "getAccountsCreditSum":

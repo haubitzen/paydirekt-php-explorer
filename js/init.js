@@ -22,6 +22,7 @@ function init() {
   document.getElementById("postCloseOrder").addEventListener("click", ajaxRequest);
   document.getElementById("getReport").addEventListener("click", ajaxRequest);
   document.getElementById("getAccountsStatus").addEventListener("click", ajaxRequest);
+  document.getElementById("getAccountsUsername").addEventListener("click", ajaxRequest);
   document.getElementById("getAccountsCreditSum").addEventListener("click", ajaxRequest);
   document.getElementById("getAccountsTransactions").addEventListener("click", ajaxRequest);
   document.getElementById("logMenu").addEventListener("click", ajaxRequest);

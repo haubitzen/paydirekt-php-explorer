@@ -89,6 +89,10 @@ function ajaxRequest(event) {
             req = new FormData(document.getElementById("getAccountsForm"));
             req.append("action", "getAccountsStatus");
         break;
+        case "getAccountsUsername":
+            req = new FormData(document.getElementById("getAccountsForm"));
+            req.append("action", "getAccountsUsername");
+        break;
         case "getAccountsCreditSum":
             req = new FormData(document.getElementById("getAccountsForm"));
             req.append("action", "getAccountsCreditSum");
