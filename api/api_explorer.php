@@ -690,6 +690,10 @@ class Accounts {
 	}
 }
 
+class Paylink {
+  
+}
+
 class Curl {
 	private function __construct() {
 	}
@@ -911,6 +915,18 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 		case "executePaylinkCheckout":
 			$userAction = Checkout::executePaylinkCheckout($_SESSION["access_token"], $_SESSION["checkoutId"]);
 			echo '{"notify": "Bestellung bestätigt"}';
+			break;
+		case "postPaylink":
+			//$userAction = Accounts::retrieveAccountStatus($_SESSION["access_token"]);
+			//print_r(json_decode($userAction));
+			break;
+		case "getPaylink":
+			//$userAction = Accounts::retrieveAccountStatus($_SESSION["access_token"]);
+			//print_r(json_decode($userAction));
+			break;
+		case "invalidatePaylink":
+			//$userAction = Accounts::retrieveAccountStatus($_SESSION["access_token"]);
+			//print_r(json_decode($userAction));
 			break;
 		default:
 			echo '{"notify": "Keine Aktion uebergeben"}';

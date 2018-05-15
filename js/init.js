@@ -15,11 +15,14 @@ function init() {
   document.getElementById("getCheckout").addEventListener("click", ajaxRequest);
   document.getElementById("updateDeliveryInformation").addEventListener("click", ajaxRequest);
   document.getElementById("updateInvoiceReference").addEventListener("click", ajaxRequest);
+  document.getElementById("postCloseOrder").addEventListener("click", ajaxRequest);
+  document.getElementById("postPaylink").addEventListener("click", ajaxRequest);
+  document.getElementById("getPaylink").addEventListener("click", ajaxRequest);
+  document.getElementById("invalidatePaylink").addEventListener("click", ajaxRequest);
   document.getElementById("postCapture").addEventListener("click", ajaxRequest);
   document.getElementById("getCapture").addEventListener("click", ajaxRequest);
   document.getElementById("postRefund").addEventListener("click", ajaxRequest);
   document.getElementById("getRefund").addEventListener("click", ajaxRequest);
-  document.getElementById("postCloseOrder").addEventListener("click", ajaxRequest);
   document.getElementById("getReport").addEventListener("click", ajaxRequest);
   document.getElementById("getAccountsStatus").addEventListener("click", ajaxRequest);
   document.getElementById("getAccountsUsername").addEventListener("click", ajaxRequest);

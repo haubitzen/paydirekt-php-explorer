@@ -65,6 +65,18 @@ function ajaxRequest(event) {
             req = new FormData(document.getElementById("closeOrderForm"));
             req.append("action", "closeOrder");
             break;
+        case "postPaylink":
+            req = new FormData(document.getElementById("postPaylinkForm"));
+            req.append("action", "postPaylink");
+            break;
+        case "getPaylink":
+            req = new FormData(document.getElementById("getPaylinkForm"));
+            req.append("action", "getPaylink");
+            break;
+        case "invalidatePaylink":
+            req = new FormData(document.getElementById("invalidatePaylinkForm"));
+            req.append("action", "invalidatePaylink");
+            break;
         case "postCapture":
             req = new FormData(document.getElementById("postCaptureForm"));
             req.append("action", "postCapture");
