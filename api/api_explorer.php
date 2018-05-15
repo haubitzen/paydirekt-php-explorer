@@ -125,31 +125,6 @@ class TokenObtain {
         $body = json_encode($body);
 		return Curl::runCurl($header, $body, self::sbxTokenObtainEndpoint, "POST");
 	}
-	
-	public function autoToken() {
-	  $apiSettings = parse_ini_file("settings.ini");
-		$APIKEY = $apiSettings["webApiKey"];
-		$APISECRET = $apiSettings["webApiSecret"];
-		$requestID = UUID::createUUID();
-		$randomNonce = RandomNonce::nonce();
-		$now = time();
-		$timestamp = gmdate("YmdHis",$now);
-		$signature = Signature::hashSignature($requestID, $APIKEY, $timestamp, $randomNonce, $APISECRET);
-		$timestamp = gmdate(DATE_RFC1123, $now);
-		$header = array();
-		array_push($header, "X-Auth-Key: " .$APIKEY);
-		array_push($header, "X-Auth-Code: " .$signature);
-		array_push($header, "X-Request-ID: " .$requestID);
-		array_push($header, "X-Date: " .$timestamp);
-		array_push($header, "Content-Type: " ."application/hal+json;charset=utf-8");
-		array_push($header, "Accept: " ."application/hal+json");
-		$body = array(
-            "grantType" => "api_key",
-            "randomNonce" => $randomNonce
-        );
-        $body = json_encode($body);
-		return Curl::runCurl($header, $body, self::sbxTokenObtainEndpoint, "POST");
-	}
 }
 
 class CustomerAuthorization {
@@ -345,34 +320,6 @@ class Checkout {
 		$payload = json_encode($payload);
 		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
 	}
-	
-	public function createPaylinkCheckout($token, $payId) {
-		//$requestID = UUID::createUUID();
-		$timestamp = gmdate(DATE_RFC1123, time());
-		$header = array();
-		array_push($header, "Authorization: " ."Bearer " .$token);
-		//array_push($header, "X-Request-ID: " .$requestID);
-		array_push($header, "Content-Type: " ."application/hal+json;charset=utf-8");
-		array_push($header, "Accept: " ."application/hal+json");
-		array_push($header, "Date: " .$timestamp);
-		
-		$payload = array();
-		$paymentsData = file_get_contents('../paylink/payments.json');
-		$paymentsJson = json_decode($paymentsData, true);
-		$payment = array_search($payId, array_column($paymentsJson['payments'], 'id'));
-		$payload['type'] = "DIRECT_SALE";
-		$payload['express'] = "true";
-		$payload['totalAmount'] = $paymentsJson['payments'][$payment]['totalAmount'];
-		$payload['merchantOrderReferenceNumber'] = "order123";
-		$payload['currency'] = "EUR";
-    $payload['redirectUrlAfterSuccess'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/paylink/executePaylink.html";
-    $payload['redirectUrlAfterCancellation'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#cancel";
-    $payload['redirectUrlAfterRejection'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#reject";
-    $payload['callbackUrlCheckDestinations'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/api/expressCallback.php";
-    $payload['webUrlShippingTerms'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#shippingTerms";
-		$payload = json_encode($payload);
-		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
-	}
 
 	public function executeCheckout($token) {
 		//$requestID = UUID::createUUID();
@@ -391,28 +338,6 @@ class Checkout {
 				$payload[$key] = $value;
 			}
 		}
-		$payload = json_encode($payload);
-		return Curl::runCurl($header, $payload, $endpoint, "POST");
-	}
-	
-	public function executePaylinkCheckout($token, $checkoutId) {
-		//$requestID = UUID::createUUID();
-		$timestamp = gmdate(DATE_RFC1123, time());
-		$header = array();
-		array_push($header, "Authorization: " ."Bearer " .$token);
-		//array_push($header, "X-Request-ID: " .$requestID);
-		array_push($header, "Content-Type: " ."application/hal+json;charset=utf-8");
-		array_push($header, "Accept: " ."application/hal+json");
-		array_push($header, "Date: " .$timestamp);
-		
-		$endpoint = self::sbxCheckoutEndpoint . "/" . $checkoutId . "/execute";
-    
-    $now = time();
-		$timestamp = date("Y-m-d",$now);
-    $payload = array();
-    $payload['termsAcceptedTimestamp'] = $timestamp;
-    $payload['merchantOrderReferenceNumber'] = "order123";
-    
 		$payload = json_encode($payload);
 		return Curl::runCurl($header, $payload, $endpoint, "POST");
 	}
@@ -691,7 +616,108 @@ class Accounts {
 }
 
 class Paylink {
-  
+  const sbxTokenObtainEndpoint = "https://api.sandbox.paydirekt.de/api/merchantintegration/v1/token/obtain";
+  const sbxCheckoutEndpoint = "https://api.sandbox.paydirekt.de/api/checkout/v1/checkouts";
+
+	private function __construct() {
+	}
+	
+	public function retrievePaylinkPayments($payId = null) {
+	  $paymentsDB = file_get_contents('../paylink/payments.json');
+		$payments = json_decode($paymentsDB, true);
+		return $payments;
+		/*
+		if (is_null($payId)) {
+		  return $payments;
+		} else {
+		  return array_search($payId, array_column($payments['payments'], 'id'));
+		}
+		*/
+	}
+	
+	public function autoToken() {
+	  $apiSettings = parse_ini_file("settings.ini");
+		$APIKEY = $apiSettings["webApiKey"];
+		$APISECRET = $apiSettings["webApiSecret"];
+		$requestID = UUID::createUUID();
+		$randomNonce = RandomNonce::nonce();
+		$now = time();
+		$timestamp = gmdate("YmdHis",$now);
+		$signature = Signature::hashSignature($requestID, $APIKEY, $timestamp, $randomNonce, $APISECRET);
+		$timestamp = gmdate(DATE_RFC1123, $now);
+		$header = array();
+		array_push($header, "X-Auth-Key: " .$APIKEY);
+		array_push($header, "X-Auth-Code: " .$signature);
+		array_push($header, "X-Request-ID: " .$requestID);
+		array_push($header, "X-Date: " .$timestamp);
+		array_push($header, "Content-Type: " ."application/hal+json;charset=utf-8");
+		array_push($header, "Accept: " ."application/hal+json");
+		$body = array(
+            "grantType" => "api_key",
+            "randomNonce" => $randomNonce
+        );
+        $body = json_encode($body);
+		return Curl::runCurl($header, $body, self::sbxTokenObtainEndpoint, "POST");
+	}
+	
+	public function createPaylinkCheckout($token, $payId) {
+		//$requestID = UUID::createUUID();
+		$timestamp = gmdate(DATE_RFC1123, time());
+		$header = array();
+		array_push($header, "Authorization: " ."Bearer " .$token);
+		//array_push($header, "X-Request-ID: " .$requestID);
+		array_push($header, "Content-Type: " ."application/hal+json;charset=utf-8");
+		array_push($header, "Accept: " ."application/hal+json");
+		array_push($header, "Date: " .$timestamp);
+		
+		$payload = array();
+		$paymentsData = file_get_contents('../paylink/payments.json');
+		$paymentsJson = json_decode($paymentsData, true);
+		$payment = array_search($payId, array_column($paymentsJson['payments'], 'id'));
+		$payload['type'] = "DIRECT_SALE";
+		$payload['express'] = "true";
+		$payload['totalAmount'] = $paymentsJson['payments'][$payment]['totalAmount'];
+		$payload['merchantOrderReferenceNumber'] = "order123";
+		$payload['currency'] = "EUR";
+    $payload['redirectUrlAfterSuccess'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/paylink/executePaylink.html";
+    $payload['redirectUrlAfterCancellation'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#cancel";
+    $payload['redirectUrlAfterRejection'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#reject";
+    $payload['callbackUrlCheckDestinations'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/api/expressCallback.php";
+    $payload['webUrlShippingTerms'] = "https://lauritzen.me/restricted/paydirekt-php-explorer/#shippingTerms";
+		$payload = json_encode($payload);
+		return Curl::runCurl($header, $payload, self::sbxCheckoutEndpoint, "POST");
+	}
+	
+	public function executePaylinkCheckout($token, $checkoutId) {
+		//$requestID = UUID::createUUID();
+		$timestamp = gmdate(DATE_RFC1123, time());
+		$header = array();
+		array_push($header, "Authorization: " ."Bearer " .$token);
+		//array_push($header, "X-Request-ID: " .$requestID);
+		array_push($header, "Content-Type: " ."application/hal+json;charset=utf-8");
+		array_push($header, "Accept: " ."application/hal+json");
+		array_push($header, "Date: " .$timestamp);
+		
+		$endpoint = self::sbxCheckoutEndpoint . "/" . $checkoutId . "/execute";
+    
+    $now = time();
+		$timestamp = date("Y-m-d",$now);
+    $payload = array();
+    $payload['termsAcceptedTimestamp'] = $timestamp;
+    $payload['merchantOrderReferenceNumber'] = "order123";
+    
+		$payload = json_encode($payload);
+		return Curl::runCurl($header, $payload, $endpoint, "POST");
+	}
+	
+	public function getPaylinkPayments($payId = null) {
+	  $payments = self::retrievePaylinkPayments();
+	  if (is_null($payId)) {
+	    return $payments;
+	  } else {
+	    return array_search($payId, array_column($payments['payments'], 'id'));
+	  }
+	}
 }
 
 class Curl {
@@ -902,10 +928,10 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			break;
 		case "paylink":
 		  $payId = $_POST["payId"];
-			$userAction = TokenObtain::autoToken();
+			$userAction = Paylink::autoToken();
 			$token = json_decode($userAction, true);
 			$_SESSION["access_token"] = $token["access_token"];
-			$userAction = Checkout::createPaylinkCheckout($_SESSION["access_token"],$payId);
+			$userAction = Paylink::createPaylinkCheckout($_SESSION["access_token"],$payId);
 			$checkout = json_decode($userAction, true);
 			$_SESSION["checkoutId"] = $checkout["checkoutId"];
 			$approveCheckout = $checkout["_links"]["approve"]["href"];
@@ -913,7 +939,7 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			//print_r(json_decode($userAction));
 			break;
 		case "executePaylinkCheckout":
-			$userAction = Checkout::executePaylinkCheckout($_SESSION["access_token"], $_SESSION["checkoutId"]);
+			$userAction = Paylink::executePaylinkCheckout($_SESSION["access_token"], $_SESSION["checkoutId"]);
 			echo '{"notify": "Bestellung bestätigt"}';
 			break;
 		case "postPaylink":
@@ -921,8 +947,13 @@ if (isset($_POST["action"]) && !empty($_POST["action"])) {
 			//print_r(json_decode($userAction));
 			break;
 		case "getPaylink":
-			//$userAction = Accounts::retrieveAccountStatus($_SESSION["access_token"]);
-			//print_r(json_decode($userAction));
+		  if ($_POST["paylinkId"]) {
+		    $payId = $_POST["paylinkId"];
+		    $userAction = Paylink::getPaylinkPayments($payId = null);
+		  } else {
+		    $userAction = Paylink::getPaylinkPayments();
+		  }
+			print_r($userAction);
 			break;
 		case "invalidatePaylink":
 			//$userAction = Accounts::retrieveAccountStatus($_SESSION["access_token"]);
